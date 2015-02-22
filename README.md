@@ -1,5 +1,5 @@
 # leadsheets
-this appis in a very early stage right now. the basic idea is to display and create music lead sheets based on *.txt-files,
+this android app is in a very early stage right now. the basic idea is to display and create music lead sheets based on *.txt-files,
 which are locally saved on your sd-card, so that you can sync them with external tools like FolderSync to services like Google Drive or 
 Dropbox, with the following goals: 
 
