@@ -1,0 +1,39 @@
+apply plugin: 'com.android.application'
+apply plugin: 'hugo'
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "21.1.2"
+
+    defaultConfig {
+        applicationId "com.example.jwerner.mmd"
+        minSdkVersion 15
+        targetSdkVersion 21
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    compile 'com.android.support:appcompat-v7:21.0.3'
+    compile group: 'com.google.guava', name: 'guava', version: '18.0'
+    compile 'io.reactivex:rxjava:1.0.0'
+    compile 'com.nispok:snackbar:2.8.0'
+    compile 'com.jakewharton:butterknife:6.1.0'
+    compile 'com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:0.6.1'
+    compile 'de.greenrobot:eventbus:2.4.0'
+
+    compile 'com.squareup.dagger:dagger:1.2.2'
+    provided 'com.squareup.dagger:dagger-compiler:1.2.2'
+    compile 'com.jakewharton.timber:timber:2.7.1'
+
+
+}
