@@ -30,11 +30,13 @@ public class FileLayer {
 
         final ArrayList<String> filenames = new ArrayList<>();
         File files[] = fullPath.listFiles();
-        Arrays.sort(files);
-        for (File f : files) {
-            String fName = f.getName();
-            if (fName.endsWith("txt")) {
-                filenames.add(fName.substring(0, fName.length() - 4));
+        if (files != null) {
+            Arrays.sort(files);
+            for (File f : files) {
+                String fName = f.getName();
+                if (fName.endsWith("txt")) {
+                    filenames.add(fName.substring(0, fName.length() - 4));
+                }
             }
         }
         return filenames;
@@ -43,10 +45,12 @@ public class FileLayer {
     public ArrayList<String> getFolders() {
         File files[] = mRootPath.listFiles();
         final ArrayList<String> folders = new ArrayList<>();
-        for (File f : files) {
-            String fName = f.getName();
-            if (f.isDirectory()) {
-                folders.add(fName);
+        if (files != null) {
+            for (File f : files) {
+                String fName = f.getName();
+                if (f.isDirectory()) {
+                    folders.add(fName);
+                }
             }
         }
         return folders;
