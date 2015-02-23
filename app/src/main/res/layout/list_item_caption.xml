@@ -25,11 +25,11 @@
             android:id="@+id/list_item_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#e0e0e0"
+            android:background="#ececec"
             android:gravity="center_vertical"
             android:paddingLeft="16dp"
             android:text="Projects"
-            android:textColor="#757575"
+            android:textColor="#989898"
             android:textSize="14dp"
             android:textStyle="bold"/>
     </RelativeLayout>

@@ -16,28 +16,18 @@
 -->
 <resources>
     <color name="background">#fff0f0f0</color>
+    <color name="background_list_item">#fff</color>
 
-    <color name="bg_item_normal_state">#fff0f0f0</color>
-    <color name="bg_item_normal_pressed_state">#fff0f0f0</color>
-    <color name="bg_item_dragging_state">#fff0f0f0</color>
-    <color name="bg_item_dragging_active_state">#fff0f0f0</color>
-    <color name="bg_item_swiping_state">#fff0f0f0</color>
-    <color name="bg_item_swiping_active_state">#fff0f0f0</color>
-
-    <color name="bg_group_item_normal_state">#ffddffdd</color>
-    <color name="bg_group_item_normal_pressed_state">#ff99cc99</color>
-    <color name="bg_group_item_expanded_state">#ff88dd88</color>
-    <color name="bg_group_item_expanded_pressed_state">#ff99cc99</color>
-    <color name="bg_group_item_dragging_state">#ffeeccff</color>
-    <color name="bg_group_item_dragging_active_state">#ffee99ff</color>
-    <color name="bg_group_item_swiping_state">#ffddccff</color>
-    <color name="bg_group_item_swiping_active_state">#ffbb99ff</color>
+    <color name="bg_item_normal_state">@color/background_list_item</color>
+    <color name="bg_item_normal_pressed_state">@color/background_list_item</color>
+    <color name="bg_item_dragging_state">@color/background_list_item</color>
+    <color name="bg_item_dragging_active_state">@color/background_list_item</color>
+    <color name="bg_item_swiping_state">@color/background_list_item</color>
+    <color name="bg_item_swiping_active_state">@color/background_list_item</color>
 
     <color name="bg_swipe_item_neutral">#ffffffff</color>
     <color name="bg_swipe_item_left">#fff9930d</color>
     <color name="bg_swipe_item_right">#F44336</color>
-    <color name="bg_swipe_group_item_left">#fff45f30</color>
-    <color name="bg_swipe_group_item_right">#ff295db3</color>
 
     <color name="snackbar_action_color_done">#ffccccff</color>
 
