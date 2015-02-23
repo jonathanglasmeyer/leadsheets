@@ -20,6 +20,9 @@ the following features are on the agenda:
 ![Performance View](http://i.imgur.com/W6WXVQb.png)
 ![Sorting](http://i.imgur.com/7c5nkpV.png)
 
+## [issue / feature tracker](https://www.pivotaltracker.com/n/projects/1283612)
+
+
 ## library credits
 Right now I'm making use of the following wonderful libraries:
 
@@ -34,3 +37,5 @@ Right now I'm making use of the following wonderful libraries:
     compile 'com.squareup.dagger:dagger:1.2.2'
     provided 'com.squareup.dagger:dagger-compiler:1.2.2'
     compile 'com.jakewharton.timber:timber:2.7.1'
+    
+
