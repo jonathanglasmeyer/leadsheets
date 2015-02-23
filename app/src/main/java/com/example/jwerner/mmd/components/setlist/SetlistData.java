@@ -4,8 +4,6 @@ import com.example.jwerner.mmd.data.AbstractDataProvider;
 import com.example.jwerner.mmd.data.FileLayer;
 import com.example.jwerner.mmd.helpers.Strings;
 import com.example.jwerner.mmd.lib.TinyDB;
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -32,18 +30,15 @@ import timber.log.Timber;
     private int mLastRemovedPosition = -1;
     private String mCurrentDir;
     private ArrayList<String> mFileNames;
-    private ArrayList<String> mFolderNames;
     private ArrayList<String> mSetlist;
     private TinyDB mTinyDB;
-    private FileLayer mFileLayer;
 
     @Inject public SetlistData(TinyDB tinyDB, FileLayer fileLayer) {
         mTinyDB = tinyDB;
-        mFileLayer = fileLayer;
 
         mCurrentDir = mTinyDB.getString(FOLDER);
-        mFileNames = mFileLayer.getFilenamesForFolder(mCurrentDir);
-        mFolderNames = mFileLayer.getFolders();
+        mFileNames = fileLayer.getFilenamesForFolder(mCurrentDir);
+//        final ArrayList<String> folderNames = fileLayer.getFolders();
         mSetlist = mTinyDB.getList(mCurrentDir);
         if (mSetlist.size() == 0) mSetlist = mFileNames;
 
@@ -68,17 +63,8 @@ import timber.log.Timber;
 
     @DebugLog
     private Iterable<String> songsNotInSetlist() {
-        final Iterable<String> setlistLowercased = Iterables.transform(mSetlist, new Function<String, String>() {
-            @Override public String apply(final String input) {
-                return input.toLowerCase();
-            }
-        });
-        return Iterables.filter(mFileNames, new Predicate<String>() {
-            @Override
-            public boolean apply(final String fName) {
-                return !(Iterables.contains(setlistLowercased, fName.toLowerCase()));
-            }
-        });
+        final Iterable<String> setlistLowercase = Iterables.transform(mSetlist, String::toLowerCase);
+        return Iterables.filter(mFileNames, fName -> !(Iterables.contains(setlistLowercase, fName.toLowerCase())));
     }
 
     public String getCurrentDir() {
@@ -86,11 +72,7 @@ import timber.log.Timber;
     }
 
     public int getNewSetlistItemPos() {
-        final int firstIndexNotSetlistItem = Iterables.indexOf(mData.subList(1, mData.size()), new Predicate<ConcreteData>() {
-            @Override public boolean apply(final ConcreteData input) {
-                return input.getItemType() != ITEM_TYPE_SETLIST;
-            }
-        });
+        final int firstIndexNotSetlistItem = Iterables.indexOf(mData.subList(1, mData.size()), input -> input.getItemType() != ITEM_TYPE_SETLIST);
         return Math.max(firstIndexNotSetlistItem + 1, 0);
     }
 
@@ -204,10 +186,8 @@ import timber.log.Timber;
     }
 
     public int getRestInsertPos(final String itemText) {
-        final int firstIndexBiggerWord = Iterables.indexOf(mData, input -> {
-            if (input.getItemType() != ITEM_TYPE_REST) return false;
-            return input.getText().compareTo(itemText) > 0;
-        });
+        final int firstIndexBiggerWord = Iterables.indexOf(mData, input ->
+                input.getItemType() == ITEM_TYPE_REST && input.getText().compareTo(itemText) > 0);
         return firstIndexBiggerWord > 0 ? firstIndexBiggerWord : mData.size();
     }
 
@@ -226,6 +206,7 @@ import timber.log.Timber;
         if (item.getItemType() == ITEM_TYPE_REST) {
             item.convertToSetlistItem();
         }
+
 
         mData.add(toPosition, item);
         mLastRemovedPosition = -1;
