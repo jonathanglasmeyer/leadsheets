@@ -94,10 +94,6 @@ import timber.log.Timber;
         return Math.max(firstIndexNotSetlistItem + 1, 0);
     }
 
-    private void backupSetlist() {
-        mTinyDB.putList(mCurrentDir, Lists.newArrayList(getSetlistFromData()));
-    }
-
     public static final class ConcreteData extends Data {
         public static final int REACTION_SETLIST_ITEM = RecyclerViewSwipeManager.REACTION_CAN_SWIPE_RIGHT;
         public static final int REACTION_REST_ITEM = RecyclerViewSwipeManager.REACTION_CAN_NOT_SWIPE_BOTH;
@@ -158,32 +154,27 @@ import timber.log.Timber;
         }
 
         @Override
-        public void setPinnedToSwipeLeft(boolean pinned) {
-
-        }
-
-        @Override
         public boolean isPinnedToSwipeLeft() {
             return false;
         }
+
+        @Override
+        public void setPinnedToSwipeLeft(boolean pinned) {
+
+        }
     }
+
+    private void backupSetlist() {
+        mTinyDB.putList(mCurrentDir, Lists.newArrayList(getSetlistFromData()));
+    }
+
 
     public FluentIterable<String> getSetlistFromData() {
         return FluentIterable.from(mData)
-                .filter(new Predicate<ConcreteData>() {
-                    @Override
-                    public boolean apply(final ConcreteData input) {
-                        return input.mItemType == ITEM_TYPE_SETLIST;
-                    }
-                })
-                .transform(new Function<ConcreteData, String>() {
-                    @Override
-                    public String apply(final ConcreteData input) {
-                        return input.getText();
-                    }
-                });
-
+                .filter(input -> input.mItemType == ITEM_TYPE_SETLIST)
+                .transform(ConcreteData::getText);
     }
+
 
     @Override
     public int getCount() {
@@ -213,11 +204,9 @@ import timber.log.Timber;
     }
 
     public int getRestInsertPos(final String itemText) {
-        final int firstIndexBiggerWord = Iterables.indexOf(mData, new Predicate<ConcreteData>() {
-            @Override public boolean apply(final ConcreteData input) {
-                if (input.getItemType() != ITEM_TYPE_REST) return false;
-                return input.getText().compareTo(itemText) > 0;
-            }
+        final int firstIndexBiggerWord = Iterables.indexOf(mData, input -> {
+            if (input.getItemType() != ITEM_TYPE_REST) return false;
+            return input.getText().compareTo(itemText) > 0;
         });
         return firstIndexBiggerWord > 0 ? firstIndexBiggerWord : mData.size();
     }

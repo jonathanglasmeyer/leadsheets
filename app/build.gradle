@@ -1,9 +1,15 @@
 apply plugin: 'com.android.application'
 apply plugin: 'hugo'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
 
     defaultConfig {
         applicationId "com.example.jwerner.mmd"
@@ -34,6 +40,8 @@ dependencies {
     compile 'com.squareup.dagger:dagger:1.2.2'
     provided 'com.squareup.dagger:dagger-compiler:1.2.2'
     compile 'com.jakewharton.timber:timber:2.7.1'
+
+    compile 'net.sourceforge.streamsupport:streamsupport:1.1.2'
 
 
 }

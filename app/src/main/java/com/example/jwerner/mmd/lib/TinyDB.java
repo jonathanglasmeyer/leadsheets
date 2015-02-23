@@ -58,7 +58,7 @@ import javax.inject.Singleton;
 
     /**
      * Returns the String path of the last image that was saved with this Object
-     * <p/>
+     * <p>
      */
     public String getSavedImagePath() {
         return lastImagePath;
@@ -67,7 +67,7 @@ import javax.inject.Singleton;
     /**
      * Returns the String path of the last image that was saved with this
      * tnydbobj
-     * <p/>
+     * <p>
      *
      * @param String the theFolder - the folder path dir you want to save it to e.g
      *               "DropBox/WorkImages"

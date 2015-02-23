@@ -43,7 +43,6 @@ public class MainActivity extends DaggerActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
 
-
         mMainController = new MainController(this);
         mToolbarController = new ToolbarController(this);
         mFragmentManager = getFragmentManager();
