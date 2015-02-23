@@ -35,9 +35,6 @@ public class DetailedSetlistAdapter extends ArrayAdapter {
         if (mView == null) {
             LayoutInflater vi = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             mView = vi.inflate(id, null);
-//            mView.setTransitionName(Integer.toString(position));
-//            mView.setTransitionName(Integer.toString(position));
-            mView.setTransitionName("1");
         }
 
         TextView text = (TextView) mView.findViewById(R.id.main_list_item_textview);

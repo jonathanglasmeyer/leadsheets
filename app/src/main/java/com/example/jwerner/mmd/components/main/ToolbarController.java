@@ -5,6 +5,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.example.jwerner.mmd.base.Controller;
+import com.example.jwerner.mmd.events.ChangeToolbarTitle;
 import com.example.jwerner.mmd.events.ToggleToolbar;
 
 /**
@@ -34,21 +35,6 @@ public class ToolbarController extends Controller {
         mStatusBarHeight = getStatusBarHeight();
         mPaddingTop = mPaddingTop == 0 ? mContentFrame.getPaddingTop() : mPaddingTop;
 
-        mDecorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-            @Override public void onSystemUiVisibilityChange(final int visibility) {
-                if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
-                    // sys bars visible
-//                    mHeader.setY(getStatusBarHeight());
-//                    mContentFrame.setPadding(0, mPaddingTop, 0, 0);
-//                    mDecorView.invalidate();
-                } else { // fullscreen
-//                    mContentFrame.setPadding(0, 0, 0, 0);
-//                    mValue = -mHeader.getBottom();
-//                    mHeader.animate().translationY(mValue).setInterpolator(new AccelerateInterpolator()).start();
-
-                }
-            }
-        });
     }
 
     public int getStatusBarHeight() {
@@ -79,6 +65,11 @@ public class ToolbarController extends Controller {
 ////            mHeader.animate().y(getStatusBarHeight()).setInterpolator(new DecelerateInterpolator()).start();
         }
         mShowToolbar = !mShowToolbar;
+    }
+
+    public void onEvent(ChangeToolbarTitle event) {
+        mContext.getSupportActionBar().setTitle(event.folderName);
+
     }
 
 

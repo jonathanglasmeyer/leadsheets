@@ -3,6 +3,7 @@ package com.example.jwerner.mmd.di;
 import android.app.Application;
 
 import com.example.jwerner.mmd.components.detailedsetlist.DetailedSetlistFragment;
+import com.example.jwerner.mmd.components.folders.FoldersFragment;
 import com.example.jwerner.mmd.components.main.MainActivity;
 import com.example.jwerner.mmd.components.main.MainController;
 import com.example.jwerner.mmd.components.main.ToolbarController;
@@ -26,7 +27,8 @@ import dagger.Provides;
                 FileLayer.class,
                 SetlistFragment.class,
                 SetlistController.class,
-                DetailedSetlistFragment.class
+                DetailedSetlistFragment.class,
+                FoldersFragment.class,
         },
         complete = false,
         library = false

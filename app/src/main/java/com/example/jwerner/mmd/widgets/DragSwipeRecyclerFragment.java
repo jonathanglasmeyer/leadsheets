@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.example.jwerner.mmd.R;
 import com.example.jwerner.mmd.base.BaseFragment;
+import com.google.common.base.Preconditions;
 import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemAnimator;
 import com.h6ah4i.android.widget.advrecyclerview.decoration.ItemShadowDecorator;
 import com.h6ah4i.android.widget.advrecyclerview.decoration.SimpleListDividerDecorator;
@@ -43,6 +44,7 @@ public abstract class DragSwipeRecyclerFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         mRecyclerView = (RecyclerView) getView().findViewById(R.id.recycler_view);
+        Preconditions.checkNotNull(mRecyclerView);
         mLayoutManager = new LinearLayoutManager(getActivity());
 
         // touch guard manager  (this class is required to suppress scrolling while swipe-dismiss animation is running)

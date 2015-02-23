@@ -31,15 +31,22 @@ import timber.log.Timber;
     private String mCurrentDir;
     private ArrayList<String> mFileNames;
     private ArrayList<String> mSetlist;
-    private TinyDB mTinyDB;
+    @Inject TinyDB mTinyDB;
+    @Inject FileLayer mFileLayer;
 
-    @Inject public SetlistData(TinyDB tinyDB, FileLayer fileLayer) {
-        mTinyDB = tinyDB;
+    public void changeCurrentDirAndRefreshData(final String currentDir) {
+        mCurrentDir = currentDir;
+        getFreshData(currentDir);
+    }
 
-        mCurrentDir = mTinyDB.getString(FOLDER);
-        mFileNames = fileLayer.getFilenamesForFolder(mCurrentDir);
-//        final ArrayList<String> folderNames = fileLayer.getFolders();
-        mSetlist = mTinyDB.getList(mCurrentDir);
+    @Inject public SetlistData() {
+//        mCurrentDir = mTinyDB.getString(FOLDER);
+//        getFreshData(mCurrentDir);
+    }
+
+    private void getFreshData(String folderName) {
+        mFileNames = mFileLayer.getFilenamesForFolder(mCurrentDir);
+        mSetlist = mTinyDB.getList(folderName);
         if (mSetlist.size() == 0) mSetlist = mFileNames;
 
 
@@ -59,6 +66,7 @@ import timber.log.Timber;
             final String formattedSongName = Strings.capitalize(songName);
             mData.add(new ConcreteData(mData.size(), viewType, ITEM_TYPE_REST, formattedSongName));
         }
+
     }
 
     @DebugLog

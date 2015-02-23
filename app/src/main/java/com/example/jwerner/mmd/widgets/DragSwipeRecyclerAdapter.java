@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.example.jwerner.mmd.R;
 import com.example.jwerner.mmd.data.AbstractDataProvider;
 import com.example.jwerner.mmd.lib.ViewUtils;
+import com.google.common.base.Preconditions;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemAdapter;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager;
 import com.h6ah4i.android.widget.advrecyclerview.swipeable.RecyclerViewSwipeManager;
@@ -43,12 +44,7 @@ public abstract class DragSwipeRecyclerAdapter
         final AbstractDataProvider.Data item = mDataProvider.getItem(position);
 
 
-        holder.mContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                handleClick(holder.getPosition());
-            }
-        });
+        holder.mContainer.setOnClickListener(v -> handleClick(holder.getPosition()));
 
         // set text
         holder.mTextView.setText(item.getText());
@@ -215,7 +211,10 @@ public abstract class DragSwipeRecyclerAdapter
             super(v);
             mContainer = (ViewGroup) v.findViewById(R.id.container);
             mDragHandle = v.findViewById(R.id.drag_handle);
-            mTextView = (TextView) v.findViewById(android.R.id.text1);
+            mTextView = (TextView) v.findViewById(R.id.list_item_text);
+            Preconditions.checkNotNull(mContainer, "mContainer is NULL");
+            Preconditions.checkNotNull(mTextView, "mTextView is NULL");
+
         }
 
 

@@ -13,12 +13,10 @@ import de.greenrobot.event.EventBus;
  * Created by jwerner on 2/9/15.
  */
 @Singleton public class SetlistAdapter extends DragSwipeRecyclerAdapter {
-    private SetlistData mSetlistData;
+   @Inject SetlistData mSetlistData;
 
     @Inject public SetlistAdapter(SetlistData setlistData) {
         super(setlistData);
-
-        mSetlistData = setlistData;
     }
 
     @Override protected void handleClick(int position) {
@@ -28,7 +26,6 @@ import de.greenrobot.event.EventBus;
     @Override protected boolean itemCanBeDragged(final AbstractDataProvider.Data item) {
         return ((SetlistData.ConcreteData) item).getItemType() == SetlistData.ITEM_TYPE_SETLIST;
     }
-
 
 //    @Override protected void handleRemove(final int position) {
 //        EventBus.getDefault().post(new SetlistRemove(position));

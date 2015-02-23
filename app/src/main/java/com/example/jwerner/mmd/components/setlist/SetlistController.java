@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.example.jwerner.mmd.R;
 import com.example.jwerner.mmd.base.Controller;
-import com.example.jwerner.mmd.components.main.MainActivity;
 import com.example.jwerner.mmd.events.SetlistGeneralClick;
 import com.example.jwerner.mmd.events.SetlistItemClick;
 import com.example.jwerner.mmd.events.SetlistRemove;
@@ -16,6 +15,7 @@ import com.nispok.snackbar.listeners.ActionClickListener;
 import javax.inject.Inject;
 
 import de.greenrobot.event.EventBus;
+import hugo.weaving.DebugLog;
 import timber.log.Timber;
 
 public class SetlistController extends Controller {
@@ -24,6 +24,7 @@ public class SetlistController extends Controller {
     @Inject SetlistData mSetlistData;
     @Inject SetlistAdapter mSetlistAdapter;
 
+    @DebugLog
     public SetlistController(Context context) {
         super(context);
         mContext = context;
@@ -66,13 +67,13 @@ public class SetlistController extends Controller {
     private void onItemUndoActionClicked() {
         int position = mSetlistData.undoLastRemoval();
         if (position >= 0) {
-            getFragment().notifyItemInserted(position);
+//            getFragment().notifyItemInserted(position);
         }
     }
 
-    private SetlistFragment getFragment() {
-        return ((SetlistFragment) ((MainActivity) mContext).getFragmentManager().findFragmentByTag(MainActivity.FRAGMENT_LIST_VIEW));
-    }
+//    private SetlistFragment getFragment() {
+//        return ((SetlistFragment) ((MainActivity) mContext).getFragmentManager().findFragmentByTag(MainActivity.FRAGMENT_LIST_VIEW));
+//    }
 
 
 }

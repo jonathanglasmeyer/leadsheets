@@ -11,13 +11,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import timber.log.Timber;
 
 /**
  * Created by jwerner on 2/10/15.
  */
-public class FileLayer {
+@Singleton public class FileLayer {
     private final File mRootPath;
 
     @Inject public FileLayer() {
@@ -42,14 +43,15 @@ public class FileLayer {
         return filenames;
     }
 
-    public ArrayList<String> getFolders() {
+    public ArrayList<Folder> getFolders() {
         File files[] = mRootPath.listFiles();
-        final ArrayList<String> folders = new ArrayList<>();
+        final ArrayList<Folder> folders = new ArrayList<>();
         if (files != null) {
             for (File f : files) {
                 String fName = f.getName();
-                if (f.isDirectory()) {
-                    folders.add(fName);
+                if (f.isDirectory() && !fName.startsWith(".")) { // exclude ".git" ...
+                    final int size = getFilenamesForFolder(fName).size();
+                    if (size > 0) folders.add(new Folder(fName, size));
                 }
             }
         }
@@ -70,5 +72,20 @@ public class FileLayer {
             fnameContentTuples.add(new String[]{fname, content});
         }
         return fnameContentTuples;
+    }
+
+    public static class Folder {
+        public String name;
+        public int count;
+
+        public Folder(String name, int count) {
+            this.name = name;
+            this.count = count;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
     }
 }

@@ -16,6 +16,11 @@ public class DetailListActivity extends ActionBarActivity {
     @InjectView(R.id.content_frame) View mContentFrame;
     private View mDecorView;
 
+    @Override protected void onPostResume() {
+        super.onPostResume();
+        hideSystemUI();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -4,6 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="42dp"
               android:clickable="false"
+              android:descendantFocusability="blocksDescendants"
               android:translationZ="-2dp">
 
     <RelativeLayout
@@ -21,13 +22,13 @@
         <!--android:background="#20000000"/>-->
 
         <TextView
-            android:id="@android:id/text1"
+            android:id="@+id/list_item_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#e0e0e0"
             android:gravity="center_vertical"
             android:paddingLeft="16dp"
-            android:text="Setlist"
+            android:text="Projects"
             android:textColor="#757575"
             android:textSize="14dp"
             android:textStyle="bold"/>

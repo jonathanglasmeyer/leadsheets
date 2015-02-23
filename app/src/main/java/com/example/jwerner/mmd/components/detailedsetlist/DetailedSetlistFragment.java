@@ -26,6 +26,8 @@ import butterknife.InjectView;
  * Created by jwerner on 2/20/15.
  */
 public class DetailedSetlistFragment extends BaseFragment {
+    public static final String POSITION = "position";
+    public static final String FOLDER_NAME = "folderName";
     @InjectView(R.id.detailed_setlist) ListView mDetailedSetlist;
 
     @Inject FileLayer mFileLayer;
@@ -35,7 +37,7 @@ public class DetailedSetlistFragment extends BaseFragment {
 
     public static DetailedSetlistFragment newInstance(int position) {
         final FluentBundle bundle = FluentBundle.newFluentBundle()
-                .put("position", position);
+                .put(POSITION, position);
         return FragmentArgsSetter.setFragmentArguments(new DetailedSetlistFragment(), bundle);
     }
 
@@ -50,7 +52,7 @@ public class DetailedSetlistFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         ArrayList<String[]> initialContent = getFNameContentTuples();
         mDetailedSetlistAdapter = new DetailedSetlistAdapter(getActivity(),
-                R.layout.detailedsetlist_item, initialContent);
+                R.layout.list_item_detailed, initialContent);
         mDetailedSetlist.setAdapter(mDetailedSetlistAdapter);
         final int position = getArguments().getInt("position") - 1;
         mDetailedSetlist.setSelection(position);

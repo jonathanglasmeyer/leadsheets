@@ -11,7 +11,18 @@ import de.greenrobot.event.EventBus;
  */
 public abstract class Controller {
     protected Controller(Context context) {
-        EventBus.getDefault().register(this);
         App.get(context).inject(this);
+    }
+
+    public void unregister() {
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
+    }
+
+    public void register() {
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
     }
 }

@@ -10,7 +10,7 @@ import android.transition.Slide;
 import android.view.View;
 
 import com.example.jwerner.mmd.R;
-import com.example.jwerner.mmd.components.setlist.SetlistFragment;
+import com.example.jwerner.mmd.components.folders.FoldersFragment;
 import com.example.jwerner.mmd.di.base.DaggerActivity;
 import com.example.jwerner.mmd.events.ToggleToolbar;
 
@@ -20,7 +20,7 @@ import de.greenrobot.event.EventBus;
 
 
 public class MainActivity extends DaggerActivity {
-    public static final String FRAGMENT_LIST_VIEW = "list view";
+//    public static final String FRAGMENT_LIST_VIEW = "list view";
     @InjectView(R.id.toolbar) protected Toolbar mToolbar;
     @InjectView(R.id.header) View mHeader;
     @InjectView(R.id.content_frame) View mContentFrame;
@@ -29,11 +29,6 @@ public class MainActivity extends DaggerActivity {
     private ToolbarController mToolbarController;
     private View mDecorView;
     private int mStatusBarHeight;
-
-    @Override
-    protected void onPostCreate(final Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-    }
 
 
     @Override
@@ -44,16 +39,28 @@ public class MainActivity extends DaggerActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
 
-        mMainController = new MainController(this);
+        if (mMainController == null) mMainController = new MainController(this);
+        mMainController.register();
         mToolbarController = new ToolbarController(this);
+        mToolbarController.register();
         mFragmentManager = getFragmentManager();
+
+
+        mFragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override public void onBackStackChanged() {
+                if (mFragmentManager.getBackStackEntryCount() == 0) {
+                    mToolbar.setTitle("Leadsheets");
+                }
+            }
+        });
 
         // toolbar
         setSupportActionBar(mToolbar);
         ViewCompat.setElevation(mHeader, getResources().getDimension(R.dimen.toolbar_elevation));
 
         if (savedInstanceState == null) {
-            final SetlistFragment fragment = new SetlistFragment();
+
+            final FoldersFragment fragment = new FoldersFragment();
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 fragment.setSharedElementReturnTransition(new Slide());
@@ -61,8 +68,7 @@ public class MainActivity extends DaggerActivity {
             }
 
             getFragmentManager().beginTransaction()
-                    .add(R.id.content_frame, fragment, FRAGMENT_LIST_VIEW)
-                    .addToBackStack("Setlist")
+                    .add(R.id.content_frame, fragment)
                     .commit();
         }
     }
@@ -78,28 +84,10 @@ public class MainActivity extends DaggerActivity {
     }
 
 
-//    @OnCheckedChanged(R.id.checkbox_reorder)
-//    public void onChecked(boolean checked) {
-//        mSetlistData.mSortable = checked;
-//        final ArrayList<String[]> fNameContentTuples = getFNameContentTuples();
-//        Log.d(TAG, "onChecked " + fNameContentTuples);
-//    }
-
-
-    public int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
+    @Override protected void onDestroy() {
+        super.onDestroy();
+        mMainController.unregister();
+        mToolbarController.unregister();
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-//        updateMainList();
-    }
-
 
 }
