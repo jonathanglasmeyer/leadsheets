@@ -35,7 +35,7 @@
 
     <color name="bg_swipe_item_neutral">#ffffffff</color>
     <color name="bg_swipe_item_left">#fff9930d</color>
-    <color name="bg_swipe_item_right">#ff2f8b2a</color>
+    <color name="bg_swipe_item_right">#F44336</color>
     <color name="bg_swipe_group_item_left">#fff45f30</color>
     <color name="bg_swipe_group_item_right">#ff295db3</color>
 
