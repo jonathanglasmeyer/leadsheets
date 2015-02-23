@@ -34,7 +34,7 @@ dependencies {
     compile 'io.reactivex:rxjava:1.0.0'
     compile 'com.nispok:snackbar:2.8.0'
     compile 'com.jakewharton:butterknife:6.1.0'
-    compile 'com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:0.6.1'
+    compile 'com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:0.6.2'
     compile 'de.greenrobot:eventbus:2.4.0'
 
     compile 'com.squareup.dagger:dagger:1.2.2'

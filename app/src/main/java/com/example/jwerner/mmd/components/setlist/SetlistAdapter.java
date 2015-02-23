@@ -3,6 +3,7 @@ package com.example.jwerner.mmd.components.setlist;
 import com.example.jwerner.mmd.data.AbstractDataProvider;
 import com.example.jwerner.mmd.events.SetlistGeneralClick;
 import com.example.jwerner.mmd.widgets.DragSwipeRecyclerAdapter;
+import com.h6ah4i.android.widget.advrecyclerview.draggable.ItemDraggableRange;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -33,5 +34,10 @@ import de.greenrobot.event.EventBus;
 
     @Override protected boolean canStartDrag() {
         return mSetlistData.mSortable;
+    }
+
+    @Override public ItemDraggableRange onGetItemDraggableRange(final MyViewHolder myViewHolder) {
+            return new ItemDraggableRange(1, mSetlistData.getNewSetlistItemPos()-1);
+
     }
 }

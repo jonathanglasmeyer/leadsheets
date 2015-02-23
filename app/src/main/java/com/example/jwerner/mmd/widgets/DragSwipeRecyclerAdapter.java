@@ -181,6 +181,7 @@ public abstract class DragSwipeRecyclerAdapter
 
 //    protected abstract void handleRemove(final int position);
 
+
     @Override
     public void onPerformAfterSwipeReaction(MyViewHolder holder, int result, int reaction) {
 //        Log.d(TAG, "onPerformAfterSwipeReaction(result = " + result + ", reaction = " + reaction + ")");
