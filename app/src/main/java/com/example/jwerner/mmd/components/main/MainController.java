@@ -13,12 +13,12 @@ import com.example.jwerner.mmd.components.setlist.SetlistFragment;
 import com.example.jwerner.mmd.events.ChangeToolbarTitle;
 import com.example.jwerner.mmd.events.FolderClick;
 import com.example.jwerner.mmd.events.SetlistItemClick;
+import com.example.jwerner.mmd.stores.UIState;
 
 import de.greenrobot.event.EventBus;
 
 public class MainController extends Controller {
     private final Activity mContext;
-
 
     public MainController(Activity context) {
         super(context);
@@ -44,7 +44,7 @@ public class MainController extends Controller {
         }
         mContext.getFragmentManager().beginTransaction()
                 .replace(R.id.content_frame, fragment)
-                .addToBackStack("SetlistFragment")
+                .addToBackStack(UIState.SETLIST)
                 .commit();
         new Handler().postDelayed(() ->
             EventBus.getDefault().post(new ChangeToolbarTitle(event.folderName))

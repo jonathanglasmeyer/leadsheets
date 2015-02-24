@@ -7,6 +7,7 @@ import com.example.jwerner.mmd.base.Controller;
 import com.example.jwerner.mmd.events.SetlistGeneralClick;
 import com.example.jwerner.mmd.events.SetlistItemClick;
 import com.example.jwerner.mmd.events.SetlistRemove;
+import com.example.jwerner.mmd.events.SetlistReorder;
 import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.SnackbarManager;
 import com.nispok.snackbar.enums.SnackbarType;
@@ -44,6 +45,10 @@ public class SetlistController extends Controller {
 
     public void onEvent(SetlistRemove event) {
 //        showUndoSnackbar();
+    }
+
+    public void onEvent(SetlistReorder event) {
+        mSetlistAdapter.setReorderMode(event.reorderMode);
     }
 
     private void showUndoSnackbar() {

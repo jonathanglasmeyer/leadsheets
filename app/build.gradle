@@ -32,6 +32,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile group: 'com.google.guava', name: 'guava', version: '18.0'
     compile 'io.reactivex:rxjava:1.0.0'
+    compile 'io.reactivex:rxandroid:0.24.0'
     compile 'com.nispok:snackbar:2.8.0'
     compile 'com.jakewharton:butterknife:6.1.0'
     compile 'com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:0.6.2'

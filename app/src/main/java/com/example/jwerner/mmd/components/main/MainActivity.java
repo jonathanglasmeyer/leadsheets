@@ -13,10 +13,12 @@ import com.example.jwerner.mmd.R;
 import com.example.jwerner.mmd.components.folders.FoldersFragment;
 import com.example.jwerner.mmd.di.base.DaggerActivity;
 import com.example.jwerner.mmd.events.ToggleToolbar;
+import com.example.jwerner.mmd.stores.UIState;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import de.greenrobot.event.EventBus;
+import timber.log.Timber;
 
 
 public class MainActivity extends DaggerActivity {
@@ -29,6 +31,7 @@ public class MainActivity extends DaggerActivity {
     private ToolbarController mToolbarController;
     private View mDecorView;
     private int mStatusBarHeight;
+
 
 
     @Override
@@ -46,11 +49,18 @@ public class MainActivity extends DaggerActivity {
         mFragmentManager = getFragmentManager();
 
 
-        mFragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-            @Override public void onBackStackChanged() {
-                if (mFragmentManager.getBackStackEntryCount() == 0) {
-                    mToolbar.setTitle("Leadsheets");
-                }
+        mFragmentManager.addOnBackStackChangedListener(() -> {
+
+            final int backStackEntryCount = mFragmentManager.getBackStackEntryCount();
+            if (backStackEntryCount == 0) {
+                mToolbar.setTitle("Leadsheets");
+                return;
+            }
+
+            final String current = mFragmentManager.getBackStackEntryAt(backStackEntryCount - 1).getName();
+            if (current == UIState.SETLIST) {
+                Timber.d("backstack: " + UIState.SETLIST);
+            } else {
             }
         });
 
@@ -82,6 +92,8 @@ public class MainActivity extends DaggerActivity {
             super.onBackPressed();
         }
     }
+
+
 
 
     @Override protected void onDestroy() {

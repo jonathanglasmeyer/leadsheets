@@ -15,9 +15,15 @@ import de.greenrobot.event.EventBus;
  */
 @Singleton public class SetlistAdapter extends DragSwipeRecyclerAdapter {
    @Inject SetlistData mSetlistData;
+    protected boolean mReorderMode = false;
 
     @Inject public SetlistAdapter(SetlistData setlistData) {
         super(setlistData);
+    }
+
+    public void setReorderMode(boolean b) {
+        mReorderMode = b;
+        notifyDataSetChanged();
     }
 
     @Override protected void handleClick(int position) {
@@ -25,7 +31,7 @@ import de.greenrobot.event.EventBus;
     }
 
     @Override protected boolean itemCanBeDragged(final AbstractDataProvider.Data item) {
-        return ((SetlistData.ConcreteData) item).getItemType() == SetlistData.ITEM_TYPE_SETLIST;
+        return mReorderMode && ((SetlistData.ConcreteData) item).getItemType() == SetlistData.ITEM_TYPE_SETLIST;
     }
 
 //    @Override protected void handleRemove(final int position) {

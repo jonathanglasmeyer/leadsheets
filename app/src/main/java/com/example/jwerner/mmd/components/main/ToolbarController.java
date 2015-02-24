@@ -35,6 +35,7 @@ public class ToolbarController extends Controller {
         mStatusBarHeight = getStatusBarHeight();
         mPaddingTop = mPaddingTop == 0 ? mContentFrame.getPaddingTop() : mPaddingTop;
 
+
     }
 
     public int getStatusBarHeight() {
