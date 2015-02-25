@@ -1,5 +1,7 @@
 package com.example.jwerner.mmd.components.setlist;
 
+import android.net.Uri;
+
 import com.example.jwerner.mmd.data.AbstractDataProvider;
 import com.example.jwerner.mmd.data.FileLayer;
 import com.example.jwerner.mmd.helpers.Strings;
@@ -9,6 +11,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.h6ah4i.android.widget.advrecyclerview.swipeable.RecyclerViewSwipeManager;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,24 +27,25 @@ import timber.log.Timber;
     public static final int ITEM_TYPE_CAPTION = 2;
     public static final int ITEM_TYPE_SETLIST = 0;
     public static final int ITEM_TYPE_REST = 1;
+    public static final int ITEM_TYPE_ALPHABETICAL = 3;
     public boolean mSortable = true;
+    @Inject TinyDB mTinyDB;
+    @Inject FileLayer mFileLayer;
     private List<ConcreteData> mData;
     private ConcreteData mLastRemovedData;
     private int mLastRemovedPosition = -1;
     private String mCurrentDir;
     private ArrayList<String> mFileNames;
     private ArrayList<String> mSetlist;
-    @Inject TinyDB mTinyDB;
-    @Inject FileLayer mFileLayer;
-
-    public void changeCurrentDirAndRefreshData(final String currentDir) {
-        mCurrentDir = currentDir;
-        getFreshData(currentDir);
-    }
 
     @Inject public SetlistData() {
 //        mCurrentDir = mTinyDB.getString(FOLDER);
 //        getFreshData(mCurrentDir);
+    }
+
+    public void changeCurrentDirAndRefreshData(final String currentDir) {
+        mCurrentDir = currentDir;
+        getFreshData(currentDir);
     }
 
     private void getFreshData(String folderName) {
@@ -75,6 +79,20 @@ import timber.log.Timber;
         return Iterables.filter(mFileNames, fName -> !(Iterables.contains(setlistLowercase, fName.toLowerCase())));
     }
 
+    public void getAlphabeticalData() {
+        mFileNames = mFileLayer.getFilenamesForFolder(mCurrentDir);
+        mData = new LinkedList<>();
+        mData.add(new ConcreteData(mData.size(), 1, ITEM_TYPE_CAPTION, "Songs"));
+
+        for (String songName : mFileNames) {
+            final int id = mData.size();
+            final int viewType = 0;
+            final String formattedSongName = Strings.capitalize(songName);
+            final Uri filePath = Uri.fromFile(new File(mFileLayer.getRootPath(), new File(mCurrentDir, songName + ".txt").toString()));
+            mData.add(new ConcreteData(id, viewType, ITEM_TYPE_ALPHABETICAL, formattedSongName, filePath));
+        }
+    }
+
     public String getCurrentDir() {
         return mCurrentDir;
     }
@@ -84,21 +102,30 @@ import timber.log.Timber;
         return Math.max(firstIndexNotSetlistItem + 1, 0);
     }
 
+
     public static final class ConcreteData extends Data {
         public static final int REACTION_SETLIST_ITEM = RecyclerViewSwipeManager.REACTION_CAN_SWIPE_RIGHT;
         public static final int REACTION_REST_ITEM = RecyclerViewSwipeManager.REACTION_CAN_NOT_SWIPE_BOTH;
         public static final int REACTION_CAPTION_ITEM = RecyclerViewSwipeManager.REACTION_CAN_NOT_SWIPE_BOTH;
+        public static final int REACTION_ALPHABETICAL_ITEM = RecyclerViewSwipeManager.REACTION_CAN_NOT_SWIPE_BOTH;
         private final long mId;
         private final int mViewType;
         private final String mText;
+        private Uri mFilePath;
         private int mItemType;
         private int mSwipeReaction;
 
         public ConcreteData(int id, int viewType, int itemType, String text) {
+            this(id, viewType, itemType, text, null);
+        }
+
+        public ConcreteData(int id, int viewType, int itemType, String text, Uri filePath) {
             if (itemType == ITEM_TYPE_CAPTION) {
                 mSwipeReaction = REACTION_CAPTION_ITEM;
             } else if (itemType == ITEM_TYPE_REST) {
                 mSwipeReaction = REACTION_REST_ITEM;
+            } else if (itemType == ITEM_TYPE_ALPHABETICAL) {
+                mSwipeReaction = REACTION_ALPHABETICAL_ITEM;
             } else {
                 mSwipeReaction = REACTION_SETLIST_ITEM;
             }
@@ -107,6 +134,11 @@ import timber.log.Timber;
             mViewType = viewType;
             mItemType = itemType;
             mText = text;
+            mFilePath = filePath;
+        }
+
+        public Uri getFilePath() {
+            return mFilePath;
         }
 
         public int getItemType() {

@@ -1,6 +1,7 @@
 package com.example.jwerner.mmd.components.setlist;
 
 import android.content.Context;
+import android.content.Intent;
 
 import com.example.jwerner.mmd.R;
 import com.example.jwerner.mmd.base.Controller;
@@ -40,6 +41,12 @@ public class SetlistController extends Controller {
             mSetlistAdapter.onMoveItem(position, mSetlistData.getNewSetlistItemPos()); // notify adapter that list has changed
         } else if (itemType == SetlistData.ITEM_TYPE_SETLIST) {
             EventBus.getDefault().post(new SetlistItemClick(position));
+        } else if (itemType == SetlistData.ITEM_TYPE_ALPHABETICAL) {
+            final Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(item.getFilePath(), "text/plain");
+            mContext.startActivity(intent);
+            Timber.d("onEvent: " + item.getFilePath());
+
         }
     }
 

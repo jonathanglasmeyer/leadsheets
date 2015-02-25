@@ -19,11 +19,30 @@ import timber.log.Timber;
  * Created by jwerner on 2/10/15.
  */
 @Singleton public class FileLayer {
-    private final File mRootPath;
+    final File mRootPath;
 
     @Inject public FileLayer() {
         mRootPath = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/sheets/");
 
+    }
+
+    public File getRootPath() {
+        return mRootPath;
+    }
+
+    public ArrayList<Folder> getFolders() {
+        File files[] = mRootPath.listFiles();
+        final ArrayList<Folder> folders = new ArrayList<>();
+        if (files != null) {
+            for (File f : files) {
+                String fName = f.getName();
+                if (f.isDirectory() && !fName.startsWith(".")) { // exclude ".git" ...
+                    final int size = getFilenamesForFolder(fName).size();
+                    if (size > 0) folders.add(new Folder(fName, size));
+                }
+            }
+        }
+        return folders;
     }
 
     public ArrayList<String> getFilenamesForFolder(String folder) {
@@ -41,21 +60,6 @@ import timber.log.Timber;
             }
         }
         return filenames;
-    }
-
-    public ArrayList<Folder> getFolders() {
-        File files[] = mRootPath.listFiles();
-        final ArrayList<Folder> folders = new ArrayList<>();
-        if (files != null) {
-            for (File f : files) {
-                String fName = f.getName();
-                if (f.isDirectory() && !fName.startsWith(".")) { // exclude ".git" ...
-                    final int size = getFilenamesForFolder(fName).size();
-                    if (size > 0) folders.add(new Folder(fName, size));
-                }
-            }
-        }
-        return folders;
     }
 
     public ArrayList<String[]> getFNameContentTuples(String folder, Iterable<String> fnames) {

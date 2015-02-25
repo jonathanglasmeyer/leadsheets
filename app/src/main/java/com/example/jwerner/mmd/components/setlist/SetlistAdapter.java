@@ -14,8 +14,8 @@ import de.greenrobot.event.EventBus;
  * Created by jwerner on 2/9/15.
  */
 @Singleton public class SetlistAdapter extends DragSwipeRecyclerAdapter {
-   @Inject SetlistData mSetlistData;
     protected boolean mReorderMode = false;
+    @Inject SetlistData mSetlistData;
 
     @Inject public SetlistAdapter(SetlistData setlistData) {
         super(setlistData);
@@ -43,7 +43,12 @@ import de.greenrobot.event.EventBus;
     }
 
     @Override public ItemDraggableRange onGetItemDraggableRange(final MyViewHolder myViewHolder) {
-            return new ItemDraggableRange(1, mSetlistData.getNewSetlistItemPos()-1);
+        return new ItemDraggableRange(1, mSetlistData.getNewSetlistItemPos() - 1);
 
+    }
+
+    public void setAlphabeticalMode() {
+        mSetlistData.getAlphabeticalData();
+        notifyDataSetChanged();
     }
 }

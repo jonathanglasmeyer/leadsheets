@@ -8,15 +8,15 @@
         android:title="@string/action_settings"
         app:showAsAction="never"/>
     <item
-        android:id="@+id/action_search"
-        android:orderInCategory="300"
-        android:title="@string/action_search"
-        android:icon="@drawable/ic_search_white_24dp"
-        app:showAsAction="ifRoom"/>
-    <item
         android:id="@+id/action_reorder"
+        android:icon="@drawable/ic_swap_vert_white_24dp"
         android:orderInCategory="200"
         android:title="@string/action_reorder"
-        android:icon="@drawable/ic_swap_vert_white_24dp"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_alphabetical"
+        android:icon="@drawable/ic_action_alphabetical"
+        android:orderInCategory="400"
+        android:title="@string/action_alphabetical"
         app:showAsAction="ifRoom"/>
 </menu>

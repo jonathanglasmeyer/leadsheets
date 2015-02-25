@@ -87,7 +87,8 @@ public class SetlistFragment extends DragSwipeRecyclerFragment {
             EventBus.getDefault().post(new SetlistReorder(false));
             mMenu.clear();
             mMenuInflater.inflate(R.menu.menu_setlist, mMenu);
-
+        } else if (itemId == R.id.action_alphabetical) {
+            mSetlistAdapter.setAlphabeticalMode();
         }
         return super.onOptionsItemSelected(item);
     }
