@@ -10,8 +10,9 @@ import android.transition.Slide;
 import android.view.View;
 
 import com.example.jwerner.mmd.R;
+import com.example.jwerner.mmd.base.BaseActivity;
+import com.example.jwerner.mmd.base.Controller;
 import com.example.jwerner.mmd.components.folders.FoldersFragment;
-import com.example.jwerner.mmd.di.base.DaggerActivity;
 import com.example.jwerner.mmd.events.ToggleToolbar;
 import com.example.jwerner.mmd.stores.UIState;
 
@@ -21,29 +22,20 @@ import de.greenrobot.event.EventBus;
 import timber.log.Timber;
 
 
-public class MainActivity extends DaggerActivity {
-//    public static final String FRAGMENT_LIST_VIEW = "list view";
+public class MainActivity extends BaseActivity {
     @InjectView(R.id.toolbar) protected Toolbar mToolbar;
     @InjectView(R.id.header) View mHeader;
     @InjectView(R.id.content_frame) View mContentFrame;
     private MainController mMainController;
     private FragmentManager mFragmentManager;
     private ToolbarController mToolbarController;
-    private View mDecorView;
-    private int mStatusBarHeight;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // this is a test for pivotal tracker.. test continue
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
 
-        if (mMainController == null) mMainController = new MainController(this);
-        mMainController.register();
         mToolbarController = new ToolbarController(this);
         mToolbarController.register();
         mFragmentManager = getFragmentManager();
@@ -83,6 +75,19 @@ public class MainActivity extends DaggerActivity {
         }
     }
 
+    @Override public void setController() {
+        mMainController = new MainController(this);
+    }
+
+    @Override public void onDestroy() {
+        super.onDestroy();
+        mToolbarController.unregister();
+    }
+
+    @Override public Controller getController() {
+        return mMainController;
+    }
+
     @Override
     public void onBackPressed() {
         if (mFragmentManager.getBackStackEntryCount() != 0) {
@@ -91,15 +96,6 @@ public class MainActivity extends DaggerActivity {
         } else {
             super.onBackPressed();
         }
-    }
-
-
-
-
-    @Override protected void onDestroy() {
-        super.onDestroy();
-        mMainController.unregister();
-        mToolbarController.unregister();
     }
 
 }

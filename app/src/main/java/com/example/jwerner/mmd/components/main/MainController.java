@@ -16,10 +16,12 @@ import com.example.jwerner.mmd.events.SetlistItemClick;
 import com.example.jwerner.mmd.stores.UIState;
 
 import de.greenrobot.event.EventBus;
+import hugo.weaving.DebugLog;
 
 public class MainController extends Controller {
     private final Activity mContext;
 
+    @DebugLog
     public MainController(Activity context) {
         super(context);
         mContext = context;
@@ -47,8 +49,8 @@ public class MainController extends Controller {
                 .addToBackStack(UIState.SETLIST)
                 .commit();
         new Handler().postDelayed(() ->
-            EventBus.getDefault().post(new ChangeToolbarTitle(event.folderName))
-        , 200);
+                EventBus.getDefault().post(new ChangeToolbarTitle(event.folderName))
+                , 200);
     }
 
 

@@ -89,15 +89,15 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="aspectjrt-1.7.4" level="project" />
     <orderEntry type="library" exported="" name="streamsupport-1.1.2" level="project" />
-    <orderEntry type="library" exported="" name="eventbus-2.4.0" level="project" />
     <orderEntry type="library" exported="" name="hugo-annotations-1.1.0" level="project" />
     <orderEntry type="library" exported="" name="guava-18.0" level="project" />
-    <orderEntry type="library" exported="" name="dagger-1.2.2" level="project" />
+    <orderEntry type="library" exported="" name="eventbus-2.4.0" level="project" />
     <orderEntry type="library" exported="" name="rxandroid-0.24.0" level="project" />
+    <orderEntry type="library" exported="" name="dagger-1.2.2" level="project" />
     <orderEntry type="library" exported="" name="support-v4-21.0.3" level="project" />
     <orderEntry type="library" exported="" name="timber-2.7.1" level="project" />
-    <orderEntry type="library" exported="" name="rxjava-1.0.4" level="project" />
     <orderEntry type="library" exported="" name="javax.inject-1" level="project" />
+    <orderEntry type="library" exported="" name="rxjava-1.0.4" level="project" />
     <orderEntry type="library" exported="" name="hugo-runtime-1.1.0" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-21.0.3" level="project" />
     <orderEntry type="library" exported="" name="advrecyclerview-0.6.2" level="project" />

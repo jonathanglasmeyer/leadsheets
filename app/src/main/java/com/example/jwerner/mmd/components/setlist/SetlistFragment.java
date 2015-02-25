@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.jwerner.mmd.R;
+import com.example.jwerner.mmd.base.Controller;
 import com.example.jwerner.mmd.events.SetlistReorder;
 import com.example.jwerner.mmd.lib.FluentBundle;
 import com.example.jwerner.mmd.lib.FragmentArgsSetter;
@@ -22,26 +23,24 @@ import de.greenrobot.event.EventBus;
 
 public class SetlistFragment extends DragSwipeRecyclerFragment {
     public static final String FOLDER_NAME = "folderName";
-    private SetlistController mSetlistController;
     @Inject SetlistAdapter mSetlistAdapter;
     @Inject SetlistData mSetlistData;
     private Menu mMenu;
     private MenuInflater mMenuInflater;
+    private SetlistController mSetlistController;
 
     public static SetlistFragment newInstance(String folderName) {
         return FragmentArgsSetter.setFragmentArguments(new SetlistFragment(),
                 FluentBundle.newFluentBundle().put(FOLDER_NAME, folderName));
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (mSetlistController == null) {
-            mSetlistController = new SetlistController(getActivity());
-        }
-        mSetlistController.register();
+    @Override public void setController() {
+        mSetlistController = new SetlistController(getActivity());
     }
 
+    @Override public Controller getController() {
+        return mSetlistController;
+    }
 
     @Override public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         refreshData();
@@ -65,11 +64,9 @@ public class SetlistFragment extends DragSwipeRecyclerFragment {
         mMenuInflater.inflate(R.menu.menu_setlist, mMenu);
     }
 
-    @Override public void onDestroy() {
-        super.onDestroy();
-        mSetlistController.unregister();
+    public RecyclerView.Adapter getAdapter() {
+        return mSetlistAdapter;
     }
-
 
     @Override public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
         mMenu = menu;
@@ -77,7 +74,6 @@ public class SetlistFragment extends DragSwipeRecyclerFragment {
         mMenuInflater.inflate(R.menu.menu_setlist, mMenu);
         super.onCreateOptionsMenu(menu, inflater);
     }
-
 
     @Override public boolean onOptionsItemSelected(final MenuItem item) {
         final int itemId = item.getItemId();
@@ -94,11 +90,6 @@ public class SetlistFragment extends DragSwipeRecyclerFragment {
 
         }
         return super.onOptionsItemSelected(item);
-    }
-
-
-    public RecyclerView.Adapter getAdapter() {
-        return mSetlistAdapter;
     }
 
 }
