@@ -35,7 +35,7 @@ public class SetlistFragment extends DragSwipeRecyclerFragment {
     }
 
     @Override public void setController() {
-        mSetlistController = new SetlistController(getActivity());
+        if (mSetlistController == null) mSetlistController = new SetlistController(getActivity());
     }
 
     @Override public Controller getController() {

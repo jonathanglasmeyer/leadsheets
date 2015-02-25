@@ -19,7 +19,9 @@ public abstract class BaseActivity extends ActionBarActivity {
         ((App) getApplication()).inject(this);
     }
 
-    public abstract void setController();
+    public void setController() {
+
+    }
 
     @Override public void onDestroy() {
         super.onDestroy();
@@ -27,6 +29,10 @@ public abstract class BaseActivity extends ActionBarActivity {
         if (controller != null) {
             controller.unregister();
         }
+    }
+
+    public Controller getController() {
+        return null;
     }
 
     @Override
@@ -38,5 +44,4 @@ public abstract class BaseActivity extends ActionBarActivity {
         }
     }
 
-    public abstract Controller getController();
 }

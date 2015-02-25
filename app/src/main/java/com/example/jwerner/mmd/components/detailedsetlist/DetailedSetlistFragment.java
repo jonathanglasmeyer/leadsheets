@@ -9,7 +9,6 @@ import android.widget.ListView;
 
 import com.example.jwerner.mmd.R;
 import com.example.jwerner.mmd.base.BaseFragment;
-import com.example.jwerner.mmd.base.Controller;
 import com.example.jwerner.mmd.components.setlist.SetlistData;
 import com.example.jwerner.mmd.data.FileLayer;
 import com.example.jwerner.mmd.lib.FluentBundle;
@@ -43,9 +42,6 @@ public class DetailedSetlistFragment extends BaseFragment {
         return FragmentArgsSetter.setFragmentArguments(new DetailedSetlistFragment(), bundle);
     }
 
-    @Override public void setController() {
-    }
-
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_detailedsetlist, container, false);
@@ -53,9 +49,6 @@ public class DetailedSetlistFragment extends BaseFragment {
         return view;
     }
 
-    @Override public Controller getController() {
-        return null;
-    }
 
     @Override public void onViewCreated(final View view, final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

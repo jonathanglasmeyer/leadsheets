@@ -8,7 +8,6 @@ import android.widget.ListView;
 
 import com.example.jwerner.mmd.R;
 import com.example.jwerner.mmd.base.BaseFragment;
-import com.example.jwerner.mmd.base.Controller;
 import com.example.jwerner.mmd.data.FileLayer;
 import com.example.jwerner.mmd.events.FolderClick;
 
@@ -30,8 +29,6 @@ public class FoldersFragment extends BaseFragment {
         mAdapter = new FoldersAdapter(getActivity(), mFileLayer.getFolders());
     }
 
-    @Override public void setController() {
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,10 +38,6 @@ public class FoldersFragment extends BaseFragment {
         mFoldersListView.addHeaderView(inflater.inflate(R.layout.list_item_caption, mFoldersListView, false));
 
         return view;
-    }
-
-    @Override public Controller getController() {
-        return null;
     }
 
     @Override public void onViewCreated(final View view, final Bundle savedInstanceState) {

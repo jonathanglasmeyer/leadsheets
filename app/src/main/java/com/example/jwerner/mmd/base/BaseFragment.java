@@ -22,7 +22,11 @@ public abstract class BaseFragment extends Fragment {
         ((App) getActivity().getApplication()).inject(this);
     }
 
-    public abstract void setController();
+    public void setController() {
+
+    }
+
+    ;
 
     @Nullable @Override public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         return super.onCreateView(inflater, container, savedInstanceState);
@@ -37,7 +41,9 @@ public abstract class BaseFragment extends Fragment {
         }
     }
 
-    public abstract Controller getController();
+    public Controller getController() {
+        return null;
+    }
 
     @Override public void onDestroy() {
         super.onDestroy();

@@ -50,7 +50,7 @@ public class MainActivity extends BaseActivity {
             }
 
             final String current = mFragmentManager.getBackStackEntryAt(backStackEntryCount - 1).getName();
-            if (current == UIState.SETLIST) {
+            if (current.equals(UIState.SETLIST)) {
                 Timber.d("backstack: " + UIState.SETLIST);
             } else {
             }
@@ -76,7 +76,7 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override public void setController() {
-        mMainController = new MainController(this);
+        if (mMainController == null) mMainController = new MainController(this);
     }
 
     @Override public void onDestroy() {
