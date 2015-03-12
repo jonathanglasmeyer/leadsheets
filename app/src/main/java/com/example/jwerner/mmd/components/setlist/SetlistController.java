@@ -1,14 +1,22 @@
 package com.example.jwerner.mmd.components.setlist;
 
+import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
+import android.os.Build;
+import android.transition.Fade;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.jwerner.mmd.R;
 import com.example.jwerner.mmd.base.Controller;
+import com.example.jwerner.mmd.components.EditFragment;
+import com.example.jwerner.mmd.events.ChangeContent;
 import com.example.jwerner.mmd.events.SetlistGeneralClick;
 import com.example.jwerner.mmd.events.SetlistItemClick;
-import com.example.jwerner.mmd.events.SetlistRemove;
 import com.example.jwerner.mmd.events.SetlistReorder;
+import com.example.jwerner.mmd.events.SetlistReset;
+import com.example.jwerner.mmd.events.ShowUndoSnackbar;
+import com.example.jwerner.mmd.helpers.Dialog;
+import com.example.jwerner.mmd.stores.UIState;
 import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.SnackbarManager;
 import com.nispok.snackbar.enums.SnackbarType;
@@ -22,36 +30,53 @@ import timber.log.Timber;
 
 public class SetlistController extends Controller {
 
-    private final Context mContext;
+    private final SetlistFragment mFragment;
+    private final Context mActivityContext;
     @Inject SetlistData mSetlistData;
     @Inject SetlistAdapter mSetlistAdapter;
 
     @DebugLog
-    public SetlistController(Context context) {
-        super(context);
-        mContext = context;
+    public SetlistController(SetlistFragment fragment, Context activityContext) {
+        super(activityContext);
+        mFragment = fragment;
+        mActivityContext = activityContext;
     }
 
     public void onEvent(SetlistGeneralClick event) {
         final int position = event.position;
         final SetlistData.ConcreteData item = (SetlistData.ConcreteData) mSetlistData.getItem(position);
         final int itemType = item.getItemType();
-        Timber.d("onEvent click: " + itemType);
-        if (itemType == SetlistData.ITEM_TYPE_REST) {
-            mSetlistAdapter.onMoveItem(position, mSetlistData.getNewSetlistItemPos()); // notify adapter that list has changed
-        } else if (itemType == SetlistData.ITEM_TYPE_SETLIST) {
-            EventBus.getDefault().post(new SetlistItemClick(position));
-        } else if (itemType == SetlistData.ITEM_TYPE_ALPHABETICAL) {
-            final Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(item.getFilePath(), "text/plain");
-            mContext.startActivity(intent);
-            Timber.d("onEvent: " + item.getFilePath());
+        switch (itemType) {
 
+            case SetlistData.ITEM_TYPE_REST:
+                if (!UIState.lock) {
+                    mSetlistAdapter.onMoveItem(position, mSetlistData.getNewSetlistItemPos()); // notify adapter that list has changed
+                }
+                break;
+
+            case SetlistData.ITEM_TYPE_SETLIST:
+                EventBus.getDefault().post(new SetlistItemClick(position));
+                break;
+
+            case SetlistData.ITEM_TYPE_ALPHABETICAL:
+                final EditFragment fragment = EditFragment.newInstance(item.getFilePath());
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    fragment.setEnterTransition(new Fade());
+                }
+                ((Activity) mActivityContext).getFragmentManager().beginTransaction()
+                        .replace(R.id.content_frame, fragment)
+                        .addToBackStack(UIState.EDIT)
+                        .commit();
         }
     }
 
-    public void onEvent(SetlistRemove event) {
-//        showUndoSnackbar();
+    public void onEvent(final ChangeContent event) {
+        mFragment.refresh();
+    }
+
+    public void onEvent(ShowUndoSnackbar event) {
+        showUndoSnackbar();
     }
 
     public void onEvent(SetlistReorder event) {
@@ -60,7 +85,7 @@ public class SetlistController extends Controller {
 
     private void showUndoSnackbar() {
         SnackbarManager.show(
-                Snackbar.with(mContext.getApplicationContext())
+                Snackbar.with(mActivityContext.getApplicationContext())
                         .text(R.string.snack_bar_text_item_removed)
                         .actionLabel(R.string.snack_bar_action_undo)
                         .actionListener(new ActionClickListener() {
@@ -73,18 +98,29 @@ public class SetlistController extends Controller {
                         .duration(5000)
                         .type(SnackbarType.SINGLE_LINE)
                         .swipeToDismiss(false)
-                , (android.app.Activity) mContext);
+                , (android.app.Activity) mActivityContext);
     }
 
     private void onItemUndoActionClicked() {
-        int position = mSetlistData.undoLastRemoval();
-        if (position >= 0) {
-//            getFragment().notifyItemInserted(position);
-        }
+        mSetlistData.undoLastRemoval();
+//        if (position >= 0) {
+//            mSetlistAdapter.notifyItemInserted(position);
+//        }
+    }
+
+    public void onEvent(final SetlistReset event) {
+        Timber.d("onEvent: reset");
+        Dialog.showQuestionDialog(mActivityContext, "Reset Setlist?", "Reset", new MaterialDialog.ButtonCallback() {
+            @Override
+            public void onPositive(final MaterialDialog dialog) {
+                mSetlistData.resetSetlist();
+                mSetlistAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
 //    private SetlistFragment getFragment() {
-//        return ((SetlistFragment) ((MainActivity) mContext).getFragmentManager().findFragmentByTag(MainActivity.FRAGMENT_LIST_VIEW));
+//        return ((SetlistFragment) ((MainActivity) mActivityContext).getFragmentManager().findFragmentByTag(MainActivity.FRAGMENT_LIST_VIEW));
 //    }
 
 

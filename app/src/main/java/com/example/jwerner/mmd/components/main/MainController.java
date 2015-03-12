@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
-import android.transition.Slide;
+import android.transition.Fade;
 
 import com.example.jwerner.mmd.DetailListActivity;
 import com.example.jwerner.mmd.R;
@@ -42,7 +42,7 @@ public class MainController extends Controller {
         final SetlistFragment fragment = SetlistFragment.newInstance(event.folderName);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            fragment.setEnterTransition(new Slide());
+            fragment.setEnterTransition(new Fade());
         }
         mContext.getFragmentManager().beginTransaction()
                 .replace(R.id.content_frame, fragment)
@@ -50,7 +50,7 @@ public class MainController extends Controller {
                 .commit();
         new Handler().postDelayed(() ->
                 EventBus.getDefault().post(new ChangeToolbarTitle(event.folderName))
-                , 200);
+                , 50);
     }
 
 

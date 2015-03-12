@@ -13,7 +13,7 @@ public abstract class AbstractDataProvider {
 
     public abstract void moveItem(int fromPosition, int toPosition);
 
-    public abstract int undoLastRemoval();
+    public abstract void undoLastRemoval();
 
     public static abstract class Data {
         public abstract long getId();

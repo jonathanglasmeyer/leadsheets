@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container_outer"
              android:layout_width="match_parent"
              android:layout_height="?attr/listPreferredItemHeight"
              android:background="@drawable/bg_swipe_item_neutral"
@@ -11,6 +13,22 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true">
+
+        <LinearLayout
+            android:id="@+id/image_wrap"
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
+            android:paddingLeft="16dp"
+            tools:background="@color/md_blue_200">
+
+            <ImageView
+                android:id="@+id/image_number"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                tools:background="@color/md_red_200" />
+
+        </LinearLayout>
 
         <ImageButton
             android:id="@+id/drag_handle"
@@ -25,14 +43,17 @@
             android:tint="#88ffffff"
             android:visibility="gone"/>
 
+
         <TextView
             android:id="@+id/list_item_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_toLeftOf="@id/drag_handle"
+            android:layout_toRightOf="@id/image_wrap"
             android:gravity="center_vertical"
-            android:paddingLeft="?attr/listPreferredItemPaddingLeft"
-            android:textSize="16sp"/>
+            android:paddingLeft="16dp"
+            android:textSize="16sp"
+            tools:text="Just The Two Of Us" />
     </RelativeLayout>
 
 </FrameLayout>

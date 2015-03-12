@@ -24,6 +24,8 @@
         <item name="colorAccent">@color/md_amber_500</item>
         <item name="colorPrimary">@color/md_indigo_500</item>
         <item name="colorPrimaryDark">@color/md_indigo_700</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="android:actionModeBackground">?attr/colorPrimary</item>
 
 
     </style>

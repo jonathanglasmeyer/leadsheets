@@ -1,18 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="?attr/listPreferredItemHeight"
+    android:layout_height="?attr/listPreferredItemHeightLarge"
     android:background="@color/md_white_1000"
-    android:elevation="@dimen/list_item_translation_z"
     android:descendantFocusability="blocksDescendants"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:elevation="@dimen/list_item_translation_z"
+    android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/text_foldername"
+    <LinearLayout
+        android:layout_width="72dp"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:src="@drawable/ic_folder_grey600_24dp" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:paddingLeft="?attr/listPreferredItemPaddingLeft"
-        android:textSize="16sp"/>
+        android:orientation="vertical"
+        android:paddingTop="20dp">
+
+        <TextView
+            android:id="@+id/text_foldername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            tools:text="Nu Addition" />
+
+        <TextView
+            android:id="@+id/text_songscount"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="@color/md_text_54_secondaryOrIcon"
+            android:textSize="14dp"
+            tools:text="32 Songs" />
+    </LinearLayout>
 </LinearLayout>

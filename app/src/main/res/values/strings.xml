@@ -3,9 +3,7 @@
 
     <string name="app_name">Leadsheets</string>
     <string name="activity_title_launcher">Leadsheets</string>
-    <string name="snack_bar_text_item_removed">1 item removed</string>
-    <string name="snack_bar_text_group_item_removed">1 group item removed</string>
-    <string name="snack_bar_text_child_item_removed">1 child item removed</string>
+    <string name="snack_bar_text_item_removed">Song deleted</string>
     <string name="snack_bar_action_undo">UNDO</string>
     <string name="menu_item_about">About</string>
     <string name="action_settings">Settings</string>
@@ -13,5 +11,13 @@
     <string name="action_search">Search</string>
     <string name="action_reorder">Reorder</string>
     <string name="action_alphabetical">Alphabetical</string>
+    <string name="title_activity_edit">EditActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_setlist_order">Setlist</string>
+    <string name="action_reset">Reset Setlist</string>
+    <string name="action_lock">Lock</string>
+    <string name="action_about">About</string>
+    <string name="action_help">Help</string>
 
 </resources>

@@ -44,6 +44,7 @@ public abstract class DragSwipeRecyclerFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         mRecyclerView = (RecyclerView) getView().findViewById(R.id.recycler_view);
+        registerForContextMenu(mRecyclerView);
         Preconditions.checkNotNull(mRecyclerView);
         mLayoutManager = new LinearLayoutManager(getActivity());
 

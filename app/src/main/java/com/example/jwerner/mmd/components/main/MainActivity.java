@@ -1,6 +1,8 @@
 package com.example.jwerner.mmd.components.main;
 
+import android.app.AlertDialog;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
@@ -8,24 +10,40 @@ import android.support.v7.widget.Toolbar;
 import android.transition.Fade;
 import android.transition.Slide;
 import android.view.View;
+import android.widget.EditText;
 
 import com.example.jwerner.mmd.R;
 import com.example.jwerner.mmd.base.BaseActivity;
 import com.example.jwerner.mmd.base.Controller;
+import com.example.jwerner.mmd.components.EditActivity;
 import com.example.jwerner.mmd.components.folders.FoldersFragment;
+import com.example.jwerner.mmd.components.setlist.SetlistData;
+import com.example.jwerner.mmd.events.ChangeToolbarTitle;
 import com.example.jwerner.mmd.events.ToggleToolbar;
+import com.example.jwerner.mmd.helpers.Strings;
+import com.example.jwerner.mmd.stores.FileStore;
 import com.example.jwerner.mmd.stores.UIState;
+import com.melnykov.fab.FloatingActionButton;
+
+import java.io.File;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import de.greenrobot.event.EventBus;
-import timber.log.Timber;
 
 
 public class MainActivity extends BaseActivity {
     @InjectView(R.id.toolbar) protected Toolbar mToolbar;
     @InjectView(R.id.header) View mHeader;
     @InjectView(R.id.content_frame) View mContentFrame;
+    @InjectView(R.id.fab)
+    FloatingActionButton mFab;
+    @Inject
+    SetlistData mSetlistData;
+    @Inject
+    FileStore mFileStore;
     private MainController mMainController;
     private FragmentManager mFragmentManager;
     private ToolbarController mToolbarController;
@@ -41,23 +59,14 @@ public class MainActivity extends BaseActivity {
         mFragmentManager = getFragmentManager();
 
 
-        mFragmentManager.addOnBackStackChangedListener(() -> {
+        mFragmentManager.addOnBackStackChangedListener(this::handleBackstackUIChanges);
 
-            final int backStackEntryCount = mFragmentManager.getBackStackEntryCount();
-            if (backStackEntryCount == 0) {
-                mToolbar.setTitle("Leadsheets");
-                return;
-            }
+        mFab.setOnClickListener(this::handleFabClicked);
 
-            final String current = mFragmentManager.getBackStackEntryAt(backStackEntryCount - 1).getName();
-            if (current.equals(UIState.SETLIST)) {
-                Timber.d("backstack: " + UIState.SETLIST);
-            } else {
-            }
-        });
 
         // toolbar
         setSupportActionBar(mToolbar);
+        shouldDisplayHomeUp();
         ViewCompat.setElevation(mHeader, getResources().getDimension(R.dimen.toolbar_elevation));
 
         if (savedInstanceState == null) {
@@ -73,6 +82,83 @@ public class MainActivity extends BaseActivity {
                     .add(R.id.content_frame, fragment)
                     .commit();
         }
+    }
+
+    private void handleFabClicked(final View view) {
+        final View editTextLayout = getLayoutInflater().inflate(R.layout.text_edit_dialog, null);
+        final EditText editText = (EditText) editTextLayout.findViewById(R.id.edit_text_dialog);
+
+        final String currentScreen = getCurrentScreen();
+
+        new AlertDialog.Builder(this)
+                .setTitle(currentScreen.equals(UIState.SETLIST) ? "New Song" : "New Project")
+                .setView(editTextLayout)
+                .setPositiveButton("Ok", (dialog, whichButton) -> {
+                    String text = editText.getText().toString();
+                    switch (currentScreen) {
+                        case UIState.SETLIST:
+                            final File filePath = new File(new File(mFileStore.getRootPath(), mSetlistData.getCurrentDir()), text + ".txt");
+                            mFileStore.newFile(filePath);
+                            final Intent intent = new Intent(this, EditActivity.class);
+                            intent.putExtra(EditActivity.FILEPATH, filePath.toString());
+                            startActivity(intent);
+                            break;
+                        case UIState.FOLDERS:
+                            mFileStore.newFolder(text);
+                            break;
+                    }
+                }).setNegativeButton("Cancel", (dialog, whichButton) -> {
+        }).show();
+
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        getFragmentManager().popBackStack();
+        return true;
+    }
+
+    private void shouldDisplayHomeUp() {
+        boolean canGoBack = getFragmentManager().getBackStackEntryCount() > 1;
+        getSupportActionBar().setDisplayHomeAsUpEnabled(canGoBack);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        handleBackstackUIChanges();
+
+    }
+
+    private void handleBackstackUIChanges() {
+//        shouldDisplayHomeUp();
+
+        final int backStackEntryCount = mFragmentManager.getBackStackEntryCount();
+        if (backStackEntryCount == 0) {
+            mToolbar.setTitle("Leadsheets");
+            return;
+        }
+
+        final String current = getCurrentScreen();
+        switch (current) {
+            case UIState.SETLIST:
+                EventBus.getDefault().post(new ChangeToolbarTitle(mSetlistData.getCurrentDir()));
+                break;
+            case UIState.EDIT:
+                EventBus.getDefault().post(new ChangeToolbarTitle(Strings.capitalize(mFileStore.getCurrentFileWithoutExtension())));
+                break;
+            default:
+                break;
+        }
+    }
+
+    private String getCurrentScreen() {
+        final int backStackEntryCount = mFragmentManager.getBackStackEntryCount();
+        if (backStackEntryCount == 0) {
+            return UIState.FOLDERS;
+        }
+
+        return mFragmentManager.getBackStackEntryAt(backStackEntryCount - 1).getName();
     }
 
     @Override public void setController() {

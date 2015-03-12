@@ -44,7 +44,7 @@ public class DetailedSetlistAdapter extends ArrayAdapter {
             String title = item[0];
             String content = item[1];
 
-            SpannableString spannableString = new SpannableString(title + "\n" + content);
+            SpannableString spannableString = new SpannableString(title + "\n" + content.trim());
             spannableString.setSpan(new StyleSpan(Typeface.BOLD), 0, title.length(), 0);
             text.setText(spannableString);
 

@@ -7,6 +7,8 @@ package com.example.jwerner.mmd.di;
 import android.app.Application;
 import android.content.Context;
 
+import com.example.jwerner.mmd.helpers.Resources;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -20,7 +22,9 @@ import dagger.Provides;
         includes = {
                 DataModule.class
         },
-        injects = {App.class}
+        injects = {
+                App.class,
+        }
 )
 public class AppModule {
     private final App application;
@@ -38,9 +42,11 @@ public class AppModule {
     }
 
 
-//    @Provides @Singleton SetlistData provideSetlistData() {
-//        return new SetlistData(application);
-//    }
+    @Provides
+    @Singleton
+    Resources provideResources() {
+        return new Resources(application);
+    }
 
 
 }

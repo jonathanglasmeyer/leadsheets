@@ -9,9 +9,17 @@ import javax.inject.Singleton;
 @Singleton public class UIState {
 
     public static final String SETLIST = "Setlist" ;
+    public static final String EDIT = "Edit";
+    public static final String FOLDERS = "Folders";
+    public static boolean alphabetMode = false;
+    public static boolean lock;
     private boolean dragMode;
 
     @Inject public UIState() {
        dragMode = false;
+    }
+
+    public static void setLock(boolean b) {
+        lock = b;
     }
 }

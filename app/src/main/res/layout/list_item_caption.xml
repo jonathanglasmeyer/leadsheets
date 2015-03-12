@@ -1,18 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="42dp"
               android:clickable="false"
-              android:descendantFocusability="blocksDescendants"
+    android:orientation="horizontal"
               android:translationZ="-2dp">
 
     <RelativeLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="false">
+        android:layout_height="match_parent">
 
+        <ImageView
+            android:id="@+id/lock_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="#ececec"
+            android:paddingLeft="16dp"
+            android:src="@drawable/ic_lock_grey600_24dp"
+            android:tint="#88ffffff"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/delete_button_wrap"
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="#ececec"
+            android:gravity="right"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageButton
+                android:id="@+id/delete_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:background="?attr/selectableItemBackground"
+                android:drawSelectorOnTop="true"
+                android:paddingLeft="16dp"
+                android:paddingRight="10dp"
+                android:src="@drawable/ic_delete_grey600_24dp"
+                android:tint="#66ffffff"
+                tools:background="@color/material_blue_500"
+                tools:src="@drawable/ic_delete_white_24dp" />
+        </LinearLayout>
+
+        <!--android:background="?attr/selectableItemBackground"-->
         <!--<View-->
         <!--android:id="@+id/drag_handle"-->
         <!--android:layout_width="32dp"-->
@@ -25,13 +62,18 @@
             android:id="@+id/list_item_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_toLeftOf="@id/delete_button_wrap"
+            android:layout_toRightOf="@id/lock_hint"
             android:background="#ececec"
+            android:clickable="false"
             android:gravity="center_vertical"
             android:paddingLeft="16dp"
             android:text="Projects"
             android:textColor="#989898"
             android:textSize="14dp"
             android:textStyle="bold"/>
-    </RelativeLayout>
 
+
+    </RelativeLayout>
 </LinearLayout>
+

@@ -21,7 +21,7 @@
     <color name="bg_item_normal_state">@color/background_list_item</color>
     <color name="bg_item_normal_pressed_state">@color/background_list_item</color>
     <color name="bg_item_dragging_state">@color/background_list_item</color>
-    <color name="bg_item_dragging_active_state">@color/background_list_item</color>
+    <color name="bg_item_dragging_active_state">@color/md_indigo_50</color>
     <color name="bg_item_swiping_state">@color/background_list_item</color>
     <color name="bg_item_swiping_active_state">@color/background_list_item</color>
 

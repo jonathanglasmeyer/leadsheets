@@ -1,21 +1,30 @@
 package com.example.jwerner.mmd.widgets;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amulyakhare.textdrawable.TextDrawable;
 import com.example.jwerner.mmd.R;
 import com.example.jwerner.mmd.data.AbstractDataProvider;
-import com.example.jwerner.mmd.lib.ViewUtils;
+import com.example.jwerner.mmd.helpers.Resources;
+import com.example.jwerner.mmd.stores.UIState;
 import com.google.common.base.Preconditions;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemAdapter;
 import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager;
 import com.h6ah4i.android.widget.advrecyclerview.swipeable.RecyclerViewSwipeManager;
 import com.h6ah4i.android.widget.advrecyclerview.swipeable.SwipeableItemAdapter;
 import com.h6ah4i.android.widget.advrecyclerview.utils.AbstractDraggableSwipeableItemViewHolder;
+
+import javax.inject.Inject;
 
 /**
  * Created by jwerner on 2/18/15.
@@ -25,7 +34,11 @@ public abstract class DragSwipeRecyclerAdapter
         implements DraggableItemAdapter<DragSwipeRecyclerAdapter.MyViewHolder>,
         SwipeableItemAdapter<DragSwipeRecyclerAdapter.MyViewHolder> {
 
+    public int mLastLongClickedPosition;
+    @Inject
+    Resources mResources;
     private AbstractDataProvider mDataProvider;
+    private boolean mDragMode = false;
 
     protected DragSwipeRecyclerAdapter(AbstractDataProvider dataProvider) {
         mDataProvider = dataProvider;
@@ -43,17 +56,90 @@ public abstract class DragSwipeRecyclerAdapter
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final AbstractDataProvider.Data item = mDataProvider.getItem(position);
 
-
         holder.mContainer.setOnClickListener(v -> handleClick(holder.getPosition()));
+
+        if (itemCanBeDragged(item)) {
+            if (UIState.lock) {
+                // for the normally draggable items, just have no long click action in case of lock mode
+                holder.mContainer.setOnLongClickListener(v -> true);
+            } else {
+
+                holder.mContainer.setOnLongClickListener(v -> {
+                    mDragMode = true;
+                    int bgResId = R.drawable.bg_item_dragging_active_state;
+                    holder.mContainer.setBackgroundResource(bgResId);
+                    return true;
+                });
+
+                holder.mContainer.setOnTouchListener((v, event) -> {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_UP:
+                        case MotionEvent.ACTION_CANCEL:
+                            mDragMode = false;
+                            int bgResId = R.drawable.bg_item_normal_state;
+                            holder.mContainer.setBackgroundResource(bgResId);
+                            break;
+                    }
+                    return false;
+                });
+            }
+        } else {
+            // eat the long click for the non-draggable items
+            holder.mContainer.setOnLongClickListener(v -> {
+                mLastLongClickedPosition = holder.getPosition();
+                return false;
+            });
+        }
 
         // set text
         holder.mTextView.setText(item.getText());
 
-        if (itemCanBeDragged(item)) {
-            holder.mDragHandle.setVisibility(View.VISIBLE);
-        } else {
-            if (holder.mDragHandle != null) {
-                holder.mDragHandle.setVisibility(View.GONE);
+        // setlist caption
+        if (item.getText().equals("Setlist") && holder.mDeleteButtonWrap != null) {
+            if (!UIState.lock) {
+                holder.mDeleteButtonWrap.setVisibility(View.VISIBLE);
+                holder.mDeleteButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(final View v) {
+                        handleReset();
+                    }
+                });
+            }
+            if (UIState.lock) {
+                holder.mLockHint.setVisibility(View.VISIBLE);
+                holder.mDeleteButtonWrap.setVisibility(View.GONE);
+            } else {
+                holder.mLockHint.setVisibility(View.GONE);
+            }
+
+        } else if (holder.mDeleteButtonWrap != null) {
+            holder.mDeleteButtonWrap.setVisibility(View.GONE);
+            holder.mDeleteButton.setOnClickListener(null);
+            holder.mLockHint.setVisibility(View.GONE);
+        }
+
+//        if (itemCanBeDragged(item)) {
+//            holder.mDragHandle.setVisibility(View.VISIBLE);
+//        } else {
+//            if (holder.mDragHandle != null) {
+//                holder.mDragHandle.setVisibility(View.GONE);
+//            }
+//        }
+        if (holder.mImage != null && itemHasNumber(item)) {
+            holder.mImageWrap.setVisibility(View.VISIBLE);
+            TextDrawable drawable = TextDrawable.builder()
+                    .beginConfig()
+                    .textColor(Color.argb(200, 255, 255, 255))
+                    .useFont(Typeface.DEFAULT)
+                    .fontSize(mResources.spToPixel(20))
+                    .bold()
+                    .endConfig()
+                    .buildRound(position + "", mResources.getColor(R.color.md_indigo_300));
+            holder.mImage.setImageDrawable(drawable);
+        }
+        if (!itemHasNumber(item)) {
+            if (holder.mImage != null) {
+                holder.mImageWrap.setVisibility(View.GONE);
             }
         }
 
@@ -86,9 +172,13 @@ public abstract class DragSwipeRecyclerAdapter
 
     }
 
+    protected abstract void handleReset();
+
     protected abstract void handleClick(int position);
 
     protected abstract boolean itemCanBeDragged(final AbstractDataProvider.Data item);
+
+    protected abstract boolean itemHasNumber(final AbstractDataProvider.Data item);
 
     @Override
     public int getItemViewType(final int position) {
@@ -105,11 +195,17 @@ public abstract class DragSwipeRecyclerAdapter
         return mDataProvider.getCount();
     }
 
+    public AbstractDataProvider.Data getItem(int position) {
+        return mDataProvider.getItem(position);
+    }
+
     @Override
     public int onGetSwipeReactionType(MyViewHolder holder, int x, int y) {
         if (onCheckCanStartDrag(holder, x, y)) {
             return RecyclerViewSwipeManager.REACTION_CAN_NOT_SWIPE_RIGHT;
         } else {
+            if (UIState.lock && itemCanBeDragged(getItem(holder.getPosition())))
+                return RecyclerViewSwipeManager.REACTION_CAN_NOT_SWIPE_RIGHT_WITH_RUBBER_BAND_EFFECT;
             return mDataProvider.getItem(holder.getPosition()).getSwipeReactionType();
         }
     }
@@ -127,7 +223,8 @@ public abstract class DragSwipeRecyclerAdapter
         final int offsetX = containerView.getLeft() + (int) (ViewCompat.getTranslationX(containerView) + 0.5f);
         final int offsetY = containerView.getTop() + (int) (ViewCompat.getTranslationY(containerView) + 0.5f);
 
-        return canStartDrag() && ViewUtils.hitTest(dragHandleView, x - offsetX, y - offsetY);
+        return mDragMode;
+//        return canStartDrag() && ViewUtils.hitTest(dragHandleView, x - offsetX, y - offsetY);
     }
 
     protected abstract boolean canStartDrag();
@@ -141,6 +238,10 @@ public abstract class DragSwipeRecyclerAdapter
         mDataProvider.moveItem(fromPosition, toPosition);
         notifyItemChanged(fromPosition);
         notifyItemMoved(fromPosition, toPosition);
+    }
+
+    public void onChangeItem(final int position) {
+        notifyItemChanged(position);
     }
 
     @Override
@@ -184,35 +285,48 @@ public abstract class DragSwipeRecyclerAdapter
 
     @Override
     public void onPerformAfterSwipeReaction(MyViewHolder holder, int result, int reaction) {
-//        Log.d(TAG, "onPerformAfterSwipeReaction(result = " + result + ", reaction = " + reaction + ")");
 
         final int position = holder.getPosition();
 
         if (reaction == RecyclerViewSwipeManager.AFTER_SWIPE_REACTION_REMOVE_ITEM) {
-            int newPos = mDataProvider.removeItem(position);
-            notifyDataSetChanged();
+            int newPosition = mDataProvider.removeItem(position);
 
-//            handleRemove(position);
+            if (newPosition == position) {
+                notifyItemRemoved(position);
+            } else {
+                notifyItemMoved(position, newPosition);
+                notifyItemChanged(newPosition);
+            }
         }
     }
 
-    // hassssssle. for the controller.
-    public void onItemRemove(int position) {
-        notifyItemRemoved(position);
-
-    }
 
     public static class MyViewHolder extends AbstractDraggableSwipeableItemViewHolder {
 
+        public ViewGroup mContainerOuter;
         public ViewGroup mContainer;
         public View mDragHandle;
+        public ImageView mImage;
+        public ViewGroup mImageWrap;
         public TextView mTextView;
+        public ViewGroup mDeleteButtonWrap;
+        public ImageButton mDeleteButton;
+        public ImageView mLockHint;
 
         public MyViewHolder(final View v) {
             super(v);
+            // this is the viewholder for the normal items AND the caption items
+            // that means that image & draghandle might be null
             mContainer = (ViewGroup) v.findViewById(R.id.container);
+            mContainerOuter = (ViewGroup) v.findViewById(R.id.container_outer);
+            mImage = (ImageView) v.findViewById(R.id.image_number);
+            mImageWrap = (ViewGroup) v.findViewById(R.id.image_wrap);
             mDragHandle = v.findViewById(R.id.drag_handle);
             mTextView = (TextView) v.findViewById(R.id.list_item_text);
+            mDeleteButtonWrap = (ViewGroup) v.findViewById(R.id.delete_button_wrap);
+            mDeleteButton = (ImageButton) v.findViewById(R.id.delete_button);
+            mLockHint = (ImageView) v.findViewById(R.id.lock_hint);
+
             Preconditions.checkNotNull(mContainer, "mContainer is NULL");
             Preconditions.checkNotNull(mTextView, "mTextView is NULL");
 

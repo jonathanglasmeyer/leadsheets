@@ -22,7 +22,7 @@ public abstract class Controller {
 
     public void register() {
         if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this);
+            EventBus.getDefault().registerSticky(this);
         }
     }
 }

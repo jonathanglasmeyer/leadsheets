@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.jwerner.mmd.R;
-import com.example.jwerner.mmd.data.FileLayer;
+import com.example.jwerner.mmd.stores.FileStore;
 
 import java.util.List;
 
@@ -17,16 +17,17 @@ import java.util.List;
  */
 public class FoldersAdapter extends ArrayAdapter {
     private final Context mContext;
-    private final List<FileLayer.Folder> mFolders;
+    private final List<FileStore.Folder> mFolders;
 
-    public FoldersAdapter(final Context context, final List<FileLayer.Folder> folders) {
+    public FoldersAdapter(final Context context, final List<FileStore.Folder> folders) {
         super(context, 0, folders);
         mContext = context;
         mFolders = folders;
     }
 
     @Override public String getItem(final int position) {
-        return mFolders.get(position).name;
+        // -1 because of the caption item, which counts
+        return mFolders.get(position - 1).name;
     }
 
     @Override
@@ -36,12 +37,13 @@ public class FoldersAdapter extends ArrayAdapter {
             LayoutInflater vi = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             mView = vi.inflate(R.layout.list_item_folder, parent, false);
         }
-
         TextView text = (TextView) mView.findViewById(R.id.text_foldername);
+        TextView textSongsCount = (TextView) mView.findViewById(R.id.text_songscount);
 
-        final FileLayer.Folder folder = mFolders.get(position);
+        final FileStore.Folder folder = mFolders.get(position);
 //        text.setText(folder.name + " (" + folder.count + " Songs)");
         text.setText(folder.name);
+        textSongsCount.setText(folder.count + " Songs");
 
         return mView;
     }

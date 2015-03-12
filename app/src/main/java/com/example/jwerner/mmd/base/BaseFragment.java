@@ -26,7 +26,6 @@ public abstract class BaseFragment extends Fragment {
 
     }
 
-    ;
 
     @Nullable @Override public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         return super.onCreateView(inflater, container, savedInstanceState);
@@ -51,5 +50,6 @@ public abstract class BaseFragment extends Fragment {
         if (controller != null) {
             controller.unregister();
         }
+
     }
 }
