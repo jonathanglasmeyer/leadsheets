@@ -26,4 +26,9 @@ public class Resources {
     }
 
 
+    public String getString(int id) {
+        return mContext.getString(id);
+    }
+
+
 }

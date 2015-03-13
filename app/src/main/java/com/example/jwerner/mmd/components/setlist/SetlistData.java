@@ -1,8 +1,10 @@
 package com.example.jwerner.mmd.components.setlist;
 
+import com.example.jwerner.mmd.R;
 import com.example.jwerner.mmd.data.AbstractDataProvider;
 import com.example.jwerner.mmd.events.ChangeContent;
 import com.example.jwerner.mmd.events.ShowUndoSnackbar;
+import com.example.jwerner.mmd.helpers.Resources;
 import com.example.jwerner.mmd.helpers.Strings;
 import com.example.jwerner.mmd.lib.TinyDB;
 import com.example.jwerner.mmd.stores.FileStore;
@@ -32,8 +34,8 @@ import timber.log.Timber;
     public static final String HOLD = "_hold";
     public boolean mSortable = true;
     @Inject TinyDB mTinyDB;
-    @Inject
-    FileStore mFileStore;
+    @Inject Resources mResources;
+    @Inject FileStore mFileStore;
     private List<ConcreteData> mData;
     private ConcreteData mLastRemovedData;
     private int mLastRemovedPosition = -1;
@@ -67,14 +69,15 @@ import timber.log.Timber;
         UIState.setLock(getLockMode());
 
         mData = new LinkedList<>();
-        mData.add(new ConcreteData(mData.size(), 1, ITEM_TYPE_CAPTION, "Setlist", null));
+        mData.add(new ConcreteData(mData.size(), 1, ITEM_TYPE_CAPTION, mResources.getString(R.string.setlist), null))
+        ;
 
         for (String songName : mSetlist) {
             final int id = mData.size();
             final int viewType = 0;
             mData.add(new ConcreteData(id, viewType, ITEM_TYPE_SETLIST, songName, getShortFilePath(songName)));
         }
-        mData.add(new ConcreteData(mData.size(), 1, ITEM_TYPE_CAPTION, "Rest", null));
+        mData.add(new ConcreteData(mData.size(), 1, ITEM_TYPE_CAPTION, mResources.getString(R.string.rest), null));
 
         for (String songName : songsNotInSetlist()) {
             final int viewType = 0;
@@ -106,7 +109,7 @@ import timber.log.Timber;
         mAlphabeticalMode = true;
         mFileNames = mFileStore.getFilenamesForFolder(mCurrentDir);
         mData = new LinkedList<>();
-        mData.add(new ConcreteData(mData.size(), 1, ITEM_TYPE_CAPTION, "Library", null));
+        mData.add(new ConcreteData(mData.size(), 1, ITEM_TYPE_CAPTION, mResources.getString(R.string.library), null));
 
 
         for (String songName : mFileNames) {

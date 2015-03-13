@@ -19,5 +19,8 @@
     <string name="action_lock">Lock</string>
     <string name="action_about">About</string>
     <string name="action_help">Help</string>
+    <string name="setlist">Setlist</string>
+    <string name="rest">Rest</string>
+    <string name="library">Library</string>
 
 </resources>

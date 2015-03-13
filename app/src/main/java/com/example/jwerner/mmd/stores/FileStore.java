@@ -39,15 +39,20 @@ public class FileStore {
 
     public ArrayList<Folder> getFolders() {
         File files[] = mRootPath.listFiles();
+
+        if (files == null) {
+            mRootPath.mkdir();
+            return new ArrayList<>();
+        }
+
         Arrays.sort(files);
+
         final ArrayList<Folder> folders = new ArrayList<>();
-        if (files != null) {
-            for (File f : files) {
-                String fName = f.getName();
-                if (f.isDirectory() && !fName.startsWith(".")) { // exclude ".git" ...
-                    final int size = getFilenamesForFolder(fName).size();
-                    folders.add(new Folder(fName, size));
-                }
+        for (File f : files) {
+            String fName = f.getName();
+            if (f.isDirectory() && !fName.startsWith(".")) { // exclude ".git" ...
+                final int size = getFilenamesForFolder(fName).size();
+                folders.add(new Folder(fName, size));
             }
         }
         return folders;

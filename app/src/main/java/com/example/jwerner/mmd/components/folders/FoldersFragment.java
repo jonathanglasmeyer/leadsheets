@@ -27,8 +27,7 @@ import de.greenrobot.event.EventBus;
 
 public class FoldersFragment extends BaseFragment {
     @InjectView(R.id.folders_list) ListView mFoldersListView;
-    @Inject
-    FileStore mFileStore;
+    @Inject FileStore mFileStore;
     private FoldersAdapter mAdapter;
     private FoldersController mController;
 
@@ -52,7 +51,7 @@ public class FoldersFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_folders, container, false);
+        View view = inflater.inflate(R.layout.fragment_folders_list, container, false);
         ButterKnife.inject(this, view);
         setHasOptionsMenu(true);
         mFoldersListView.addHeaderView(inflater.inflate(R.layout.list_item_caption, mFoldersListView, false));

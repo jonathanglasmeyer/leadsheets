@@ -144,6 +144,7 @@ public class SetlistFragment extends DragSwipeRecyclerFragment {
                 showLockSnackbarHint(UIState.lock);
                 setLockToggleIcon(item);
                 mSetlistAdapter.onChangeItem(0);
+                mSetlistAdapter.notifyDataSetChanged();
 //                refresh();
                 break;
 
