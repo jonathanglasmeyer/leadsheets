@@ -22,6 +22,7 @@ import com.example.jwerner.mmd.components.setlist.SetlistData;
 import com.example.jwerner.mmd.di.AppComponent;
 import com.example.jwerner.mmd.events.ChangeToolbarTitle;
 import com.example.jwerner.mmd.events.ToggleToolbar;
+import com.example.jwerner.mmd.helpers.Resources;
 import com.example.jwerner.mmd.helpers.Strings;
 import com.example.jwerner.mmd.lib.TinyDB;
 import com.example.jwerner.mmd.stores.FileStore;
@@ -47,6 +48,7 @@ public class MainActivity extends BaseActivity {
     @Inject FileStore mFileStore;
     @Inject TinyDB mTinyDB;
     @Inject SharedPreferences mSharedPreferences;
+    @Inject Resources mResources;
     private MainController mMainController;
     private FragmentManager mFragmentManager;
     private ToolbarController mToolbarController;
@@ -139,7 +141,7 @@ public class MainActivity extends BaseActivity {
 
         final int backStackEntryCount = mFragmentManager.getBackStackEntryCount();
         if (backStackEntryCount == 0) {
-            mToolbar.setTitle("Leadsheets");
+            mToolbar.setTitle(mResources.getString(R.string.app_name));
             return;
         }
 

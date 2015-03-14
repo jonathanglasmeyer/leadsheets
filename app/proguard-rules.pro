@@ -15,23 +15,22 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-libraryjars libs
+-keep class android.support.v4.app.** { *; }
+-keep interface android.support.v4.app.** { *; }
+-keep class android.support.v7.app.** { *; }
+-keep interface android.support.v7.app.** { *; }
 
-# gradle retrolambda
+# gradle retrolambda ----------------------------------------------
 -dontwarn java.lang.invoke.*
 
 
-# EventBus
+# EventBus ----------------------------------------------------
 -keepclassmembers class ** {
     public void onEvent*(**);
 }
 
-# Configuration for Guava
-#
-# disagrees with instructions provided by Guava project: https://code.google.com/p/guava-libraries/wiki/UsingProGuardWithGuava
-#
-# works if you add the following line to the Gradle dependencies
-#
-# provided 'javax.annotation:jsr250-api:1.0'
+# Guava ---------------------------------------------------------
 
 -keep class com.google.common.io.Resources {
     public static <methods>;
@@ -51,7 +50,7 @@
 -keep class com.google.common.collect.MapMakerInternalMap$ReferenceEntry
 -keep class com.google.common.cache.LocalCache$ReferenceEntry
 
-# butterknife
+# butterknife ----------------------------------------------------------
 -keep class butterknife.** { *; }
 -dontwarn butterknife.internal.**
 -keep class **$$ViewInjector { *; }
@@ -60,27 +59,12 @@
     @butterknife.* <fields>;
 }
 
--keepclasseswithmembernames class * {
-    @butterknife.* <methods>;
-}
-
 -dontwarn javax.**
--dontwarn lombok.**
 -dontwarn org.apache.**
 -dontwarn com.squareup.**
 -dontwarn com.sun.**
 -dontwarn **retrofit**
 -dontwarn **dagger**
 -dontwarn **com.google.common**
+-dontwarn **mmd.di**
 
--keepclassmembers,allowobfuscation class * {
-    @javax.inject.* *;
-    @dagger.* *;
-    <init>();
-}
-
--keep class javax.inject.** { *; }
--keep class **$$ModuleAdapter
--keep class **$$InjectAdapter
--keep class **$$StaticInjection
--keep class dagger.** { *; }
