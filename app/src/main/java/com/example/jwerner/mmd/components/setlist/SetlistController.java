@@ -9,6 +9,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.jwerner.mmd.R;
 import com.example.jwerner.mmd.base.Controller;
 import com.example.jwerner.mmd.components.EditFragment;
+import com.example.jwerner.mmd.di.helper.Bus;
 import com.example.jwerner.mmd.events.ChangeContent;
 import com.example.jwerner.mmd.events.SetlistGeneralClick;
 import com.example.jwerner.mmd.events.SetlistItemClick;
@@ -42,11 +43,11 @@ public class SetlistController extends Controller {
         mFragment = fragment;
         mActivityContext = activityContext;
         mFragment.getComponent().inject(this);
-        Preconditions.checkNotNull(mSetlistAdapter);
+        Preconditions.checkNotNull(mSetlistData);
         Preconditions.checkNotNull(mSetlistAdapter);
     }
 
-    public void onEvent(SetlistGeneralClick event) {
+    @Bus public void onEvent(SetlistGeneralClick event) {
         final int position = event.position;
         final SetlistData.ConcreteData item = (SetlistData.ConcreteData) mSetlistData.getItem(position);
         final int itemType = item.getItemType();
@@ -75,15 +76,15 @@ public class SetlistController extends Controller {
         }
     }
 
-    public void onEvent(final ChangeContent event) {
+    @Bus public void onEvent(final ChangeContent event) {
         mFragment.refresh();
     }
 
-    public void onEvent(ShowUndoSnackbar event) {
+    @Bus public void onEvent(ShowUndoSnackbar event) {
         showUndoSnackbar();
     }
 
-    public void onEvent(SetlistReorder event) {
+    @Bus public void onEvent(SetlistReorder event) {
         mSetlistAdapter.setReorderMode(event.reorderMode);
     }
 
@@ -112,7 +113,7 @@ public class SetlistController extends Controller {
 //        }
     }
 
-    public void onEvent(final SetlistReset event) {
+    @Bus public void onEvent(final SetlistReset event) {
         Timber.d("onEvent: reset");
         Dialog.showQuestionDialog(mActivityContext, "Reset Setlist?", "Reset", new MaterialDialog.ButtonCallback() {
             @Override

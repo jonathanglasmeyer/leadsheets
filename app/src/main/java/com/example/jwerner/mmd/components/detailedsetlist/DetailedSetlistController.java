@@ -3,6 +3,7 @@ package com.example.jwerner.mmd.components.detailedsetlist;
 import android.content.Context;
 
 import com.example.jwerner.mmd.base.Controller;
+import com.example.jwerner.mmd.di.helper.Bus;
 import com.example.jwerner.mmd.events.ChangeContent;
 
 /**
@@ -16,7 +17,7 @@ public class DetailedSetlistController extends Controller {
         mFragment = fragment;
     }
 
-    public void onEventMainThread(final ChangeContent event) {
+    @Bus public void onEventMainThread(final ChangeContent event) {
         mFragment.refresh();
 
     }

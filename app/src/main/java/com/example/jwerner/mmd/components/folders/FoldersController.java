@@ -3,6 +3,7 @@ package com.example.jwerner.mmd.components.folders;
 import android.content.Context;
 
 import com.example.jwerner.mmd.base.Controller;
+import com.example.jwerner.mmd.di.helper.Bus;
 import com.example.jwerner.mmd.events.ChangeFolders;
 
 /**
@@ -18,7 +19,7 @@ public class FoldersController extends Controller {
         mFragment = fragment;
     }
 
-    public void onEvent(ChangeFolders event) {
+    @Bus public void onEvent(ChangeFolders event) {
         mFragment.refresh();
     }
 }

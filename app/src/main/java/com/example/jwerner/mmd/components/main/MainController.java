@@ -10,6 +10,7 @@ import com.example.jwerner.mmd.DetailListActivity;
 import com.example.jwerner.mmd.R;
 import com.example.jwerner.mmd.base.Controller;
 import com.example.jwerner.mmd.components.setlist.SetlistFragment;
+import com.example.jwerner.mmd.di.helper.Bus;
 import com.example.jwerner.mmd.events.ChangeToolbarTitle;
 import com.example.jwerner.mmd.events.FolderClick;
 import com.example.jwerner.mmd.events.SetlistItemClick;
@@ -27,7 +28,7 @@ public class MainController extends Controller {
         mContext = context;
     }
 
-    public void onEvent(SetlistItemClick event) {
+    @Bus public void onEvent(SetlistItemClick event) {
         final Intent intent = new Intent(mContext, DetailListActivity.class);
         intent.putExtra("position", event.position);
 //        mContext.getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
@@ -38,7 +39,7 @@ public class MainController extends Controller {
 
     }
 
-    public void onEvent(FolderClick event) {
+    @Bus public void onEvent(FolderClick event) {
         final SetlistFragment fragment = SetlistFragment.newInstance(event.folderName);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

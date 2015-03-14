@@ -5,6 +5,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.example.jwerner.mmd.base.Controller;
+import com.example.jwerner.mmd.di.helper.Bus;
 import com.example.jwerner.mmd.events.ChangeToolbarTitle;
 import com.example.jwerner.mmd.events.ToggleToolbar;
 
@@ -48,7 +49,7 @@ public class ToolbarController extends Controller {
     }
 
 
-    public void onEvent(ToggleToolbar event) {
+    @Bus public void onEvent(ToggleToolbar event) {
         if (mShowToolbar) { // --> hide toolbar
 //            hideSystemUI();
 //
