@@ -17,6 +17,7 @@ import com.example.jwerner.mmd.events.SetlistReset;
 import com.example.jwerner.mmd.events.ShowUndoSnackbar;
 import com.example.jwerner.mmd.helpers.Dialog;
 import com.example.jwerner.mmd.stores.UIState;
+import com.google.common.base.Preconditions;
 import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.SnackbarManager;
 import com.nispok.snackbar.enums.SnackbarType;
@@ -40,6 +41,9 @@ public class SetlistController extends Controller {
         super(activityContext);
         mFragment = fragment;
         mActivityContext = activityContext;
+        mFragment.getComponent().inject(this);
+        Preconditions.checkNotNull(mSetlistAdapter);
+        Preconditions.checkNotNull(mSetlistAdapter);
     }
 
     public void onEvent(SetlistGeneralClick event) {

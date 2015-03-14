@@ -15,6 +15,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.jwerner.mmd.R;
 import com.example.jwerner.mmd.base.BaseFragment;
 import com.example.jwerner.mmd.base.Controller;
+import com.example.jwerner.mmd.di.AppComponent;
 import com.example.jwerner.mmd.events.FolderClick;
 import com.example.jwerner.mmd.helpers.Dialog;
 import com.example.jwerner.mmd.stores.FileStore;
@@ -24,12 +25,14 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import de.greenrobot.event.EventBus;
+import timber.log.Timber;
 
 public class FoldersFragment extends BaseFragment {
     @InjectView(R.id.folders_list) ListView mFoldersListView;
     @Inject FileStore mFileStore;
     private FoldersAdapter mAdapter;
     private FoldersController mController;
+    private AppComponent mComponent;
 
     @Override
     public Controller getController() {
@@ -44,6 +47,8 @@ public class FoldersFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Timber.d("onCreate: " + mFileStore);
 
         mAdapter = new FoldersAdapter(getActivity(), mFileStore.getFolders());
     }
@@ -112,6 +117,11 @@ public class FoldersFragment extends BaseFragment {
             default:
                 return super.onContextItemSelected(item);
         }
+    }
+
+    @Override protected void onCreateComponent(AppComponent appComponent) {
+        mComponent = appComponent;
+        mComponent.inject(this);
     }
 
 }

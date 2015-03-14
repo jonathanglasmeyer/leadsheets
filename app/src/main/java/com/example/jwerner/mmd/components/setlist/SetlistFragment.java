@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 
 import com.example.jwerner.mmd.R;
 import com.example.jwerner.mmd.base.Controller;
+import com.example.jwerner.mmd.base.HasComponent;
+import com.example.jwerner.mmd.di.AppComponent;
 import com.example.jwerner.mmd.lib.FluentBundle;
 import com.example.jwerner.mmd.lib.FragmentArgsSetter;
 import com.example.jwerner.mmd.stores.UIState;
@@ -25,12 +27,13 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-public class SetlistFragment extends DragSwipeRecyclerFragment {
+public class SetlistFragment extends DragSwipeRecyclerFragment implements HasComponent<AppComponent> {
     public static final String FOLDER_NAME = "folderName";
     @Inject SetlistAdapter mSetlistAdapter;
     @Inject SetlistData mSetlistData;
     private SetlistController mSetlistController;
     private MenuItem menuItemLock;
+    private AppComponent mComponent;
 
     public static SetlistFragment newInstance(String folderName) {
         return FragmentArgsSetter.setFragmentArguments(new SetlistFragment(),
@@ -45,6 +48,7 @@ public class SetlistFragment extends DragSwipeRecyclerFragment {
     @Override public Controller getController() {
         return mSetlistController;
     }
+
 
     @Override
     public void onResume() {
@@ -191,4 +195,12 @@ public class SetlistFragment extends DragSwipeRecyclerFragment {
         }
     }
 
+    @Override protected void onCreateComponent(AppComponent appComponent) {
+        mComponent = appComponent;
+        mComponent.inject(this);
+    }
+
+    @Override public AppComponent getComponent() {
+        return mComponent;
+    }
 }

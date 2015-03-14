@@ -13,6 +13,7 @@ import com.example.jwerner.mmd.base.BaseFragment;
 import com.example.jwerner.mmd.base.Controller;
 import com.example.jwerner.mmd.components.EditActivity;
 import com.example.jwerner.mmd.components.setlist.SetlistData;
+import com.example.jwerner.mmd.di.AppComponent;
 import com.example.jwerner.mmd.lib.FluentBundle;
 import com.example.jwerner.mmd.lib.FragmentArgsSetter;
 import com.example.jwerner.mmd.stores.FileStore;
@@ -34,8 +35,7 @@ public class DetailedSetlistFragment extends BaseFragment {
     public static final String FOLDER_NAME = "folderName";
     @InjectView(R.id.detailed_setlist) ListView mDetailedSetlist;
 
-    @Inject
-    FileStore mFileStore;
+    @Inject FileStore mFileStore;
     @Inject SetlistData mSetlistData;
 
 
@@ -52,6 +52,7 @@ public class DetailedSetlistFragment extends BaseFragment {
     public Controller getController() {
         return mController;
     }
+
 
     @Override
     public void setController() {
@@ -99,6 +100,10 @@ public class DetailedSetlistFragment extends BaseFragment {
         final FluentIterable<String> setlist = mSetlistData.getSetlistFromData();
         final String currentDir = mSetlistData.getCurrentDir();
         return mFileStore.getFNameContentTuples(currentDir, setlist);
+    }
+
+    @Override protected void onCreateComponent(AppComponent appComponent) {
+        appComponent.inject(this);
     }
 
 }

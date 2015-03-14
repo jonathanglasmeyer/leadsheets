@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
 import com.example.jwerner.mmd.di.App;
+import com.example.jwerner.mmd.di.AppComponent;
 
 /**
  * Created by jwerner on 2/17/15.
@@ -13,14 +14,15 @@ public abstract class BaseActivity extends ActionBarActivity {
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setController();
 
-        // Perform injection so that when this call returns all dependencies will be available for use.
-        ((App) getApplication()).inject(this);
+        App app = App.get(this);
+        onCreateComponent(app.component());
+
+        // this has to happen after the fragment injection
+        setController();
     }
 
     public void setController() {
-
     }
 
     @Override public void onDestroy() {
@@ -43,5 +45,8 @@ public abstract class BaseActivity extends ActionBarActivity {
             controller.register();
         }
     }
+
+
+    protected abstract void onCreateComponent(AppComponent appComponent);
 
 }

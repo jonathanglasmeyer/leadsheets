@@ -11,6 +11,7 @@ import android.view.View;
 import com.example.jwerner.mmd.R;
 import com.example.jwerner.mmd.base.BaseActivity;
 import com.example.jwerner.mmd.components.setlist.SetlistData;
+import com.example.jwerner.mmd.di.AppComponent;
 import com.example.jwerner.mmd.stores.FileStore;
 
 import java.io.File;
@@ -27,10 +28,8 @@ public class EditActivity extends BaseActivity {
     protected Toolbar mToolbar;
     @InjectView(R.id.header)
     View mHeader;
-    @Inject
-    SetlistData mSetlistData;
-    @Inject
-    FileStore mFileStore;
+    @Inject SetlistData mSetlistData;
+    @Inject FileStore mFileStore;
     private File mFilePath;
 
 
@@ -73,6 +72,10 @@ public class EditActivity extends BaseActivity {
         }
 
         return (super.onOptionsItemSelected(item));
+    }
+
+    @Override protected void onCreateComponent(AppComponent appComponent) {
+        appComponent.inject(this);
     }
 
 }

@@ -6,8 +6,11 @@ package com.example.jwerner.mmd.di;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import com.example.jwerner.mmd.helpers.Resources;
+import com.example.jwerner.mmd.lib.TinyDB;
 
 import javax.inject.Singleton;
 
@@ -18,14 +21,7 @@ import dagger.Provides;
  * A module for Android-specific dependencies which require a {@link Context} or
  * {@link android.app.Application} to create.
  */
-@Module(
-        includes = {
-                DataModule.class
-        },
-        injects = {
-                App.class,
-        }
-)
+@Module
 public class AppModule {
     private final App application;
 
@@ -41,12 +37,16 @@ public class AppModule {
         return application;
     }
 
-
-    @Provides
-    @Singleton
-    Resources provideResources() {
+    @Provides @Singleton Resources provideResources() {
         return new Resources(application);
     }
 
+    @Provides @Singleton TinyDB provideTinyDB(Application app) {
 
+        return new TinyDB(app);
+    }
+
+    @Provides @Singleton SharedPreferences providePreferenceManager() {
+        return PreferenceManager.getDefaultSharedPreferences(application);
+    }
 }

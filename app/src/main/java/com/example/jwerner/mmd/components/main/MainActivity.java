@@ -3,6 +3,7 @@ package com.example.jwerner.mmd.components.main;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
@@ -18,9 +19,11 @@ import com.example.jwerner.mmd.base.Controller;
 import com.example.jwerner.mmd.components.EditActivity;
 import com.example.jwerner.mmd.components.folders.FoldersFragment;
 import com.example.jwerner.mmd.components.setlist.SetlistData;
+import com.example.jwerner.mmd.di.AppComponent;
 import com.example.jwerner.mmd.events.ChangeToolbarTitle;
 import com.example.jwerner.mmd.events.ToggleToolbar;
 import com.example.jwerner.mmd.helpers.Strings;
+import com.example.jwerner.mmd.lib.TinyDB;
 import com.example.jwerner.mmd.stores.FileStore;
 import com.example.jwerner.mmd.stores.UIState;
 import com.melnykov.fab.FloatingActionButton;
@@ -32,7 +35,6 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import de.greenrobot.event.EventBus;
-import timber.log.Timber;
 
 
 public class MainActivity extends BaseActivity {
@@ -41,10 +43,10 @@ public class MainActivity extends BaseActivity {
     @InjectView(R.id.content_frame) View mContentFrame;
     @InjectView(R.id.fab)
     FloatingActionButton mFab;
-    @Inject
-    SetlistData mSetlistData;
-    @Inject
-    FileStore mFileStore;
+    @Inject SetlistData mSetlistData;
+    @Inject FileStore mFileStore;
+    @Inject TinyDB mTinyDB;
+    @Inject SharedPreferences mSharedPreferences;
     private MainController mMainController;
     private FragmentManager mFragmentManager;
     private ToolbarController mToolbarController;
@@ -52,7 +54,6 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Timber.d("FOO");
 
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
@@ -60,11 +61,10 @@ public class MainActivity extends BaseActivity {
         mToolbarController = new ToolbarController(this);
         mToolbarController.register();
         mFragmentManager = getFragmentManager();
-
-
         mFragmentManager.addOnBackStackChangedListener(this::handleBackstackUIChanges);
 
         mFab.setOnClickListener(this::handleFabClicked);
+
 
 
         // toolbar
@@ -133,6 +133,7 @@ public class MainActivity extends BaseActivity {
 
     }
 
+
     private void handleBackstackUIChanges() {
 //        shouldDisplayHomeUp();
 
@@ -185,6 +186,10 @@ public class MainActivity extends BaseActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override protected void onCreateComponent(AppComponent appComponent) {
+        appComponent.inject(this);
     }
 
 }

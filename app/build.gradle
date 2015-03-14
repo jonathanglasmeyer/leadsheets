@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'hugo'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'com.neenbedankt.android-apt'
+
 
 android {
     compileSdkVersion 21
@@ -9,6 +11,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     lintOptions {
         checkReleaseBuilds false
     }
@@ -43,8 +46,12 @@ dependencies {
     compile 'com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:0.6.2'
     compile 'de.greenrobot:eventbus:2.4.0'
 
-    compile 'com.squareup.dagger:dagger:1.2.2'
-    provided 'com.squareup.dagger:dagger-compiler:1.2.2'
+//    compile 'com.squareup.dagger:dagger:1.2.2'
+    compile 'com.google.dagger:dagger:2.0-SNAPSHOT'
+
+//    provided 'com.squareup.dagger:dagger-compiler:1.2.2'
+    apt "com.google.dagger:dagger-compiler:2.0-SNAPSHOT"
+
     compile 'com.jakewharton.timber:timber:2.7.1'
 
 //    compile 'net.sourceforge.streamsupport:streamsupport:1.1.2'

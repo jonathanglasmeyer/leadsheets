@@ -2,8 +2,6 @@ package com.example.jwerner.mmd.base;
 
 import android.content.Context;
 
-import com.example.jwerner.mmd.di.App;
-
 import de.greenrobot.event.EventBus;
 
 /**
@@ -11,7 +9,7 @@ import de.greenrobot.event.EventBus;
  */
 public abstract class Controller {
     protected Controller(Context context) {
-        App.get(context).inject(this);
+//        App.get(context).component().inject(this);
     }
 
     public void unregister() {

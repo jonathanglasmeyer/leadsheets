@@ -4,15 +4,19 @@ import android.app.Application;
 import android.content.Context;
 
 import com.example.jwerner.mmd.BuildConfig;
+import com.example.jwerner.mmd.lib.TinyDB;
 
-import dagger.ObjectGraph;
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
 /**
  * Created by jwerner on 2/17/15.
  */
 public class App extends Application {
-    private ObjectGraph graph;
+    @Inject TinyDB mtinydb;
+    private AppComponent component;
+    //    private ObjectGraph graph;
 
     public static App get(Context context) {
         return (App) context.getApplicationContext();
@@ -20,10 +24,23 @@ public class App extends Application {
 
     @Override public void onCreate() {
         super.onCreate();
+        setupTimber();
 
-        graph = ObjectGraph.create(new AppModule(this));
+        buildComponentAndInject();
+        Timber.d("oncreate" + mtinydb);
 
+    }
 
+    private void buildComponentAndInject() {
+        component = AppComponent.Initializer.init(this);
+        component.inject(this);
+    }
+
+    public AppComponent component() {
+        return component;
+    }
+
+    private void setupTimber() {
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         } else {
@@ -31,13 +48,6 @@ public class App extends Application {
         }
     }
 
-    public void inject(Object object) {
-        graph.inject(object);
-    }
-
-    public ObjectGraph getGraph() {
-        return graph;
-    }
 
     /**
      * A tree which logs important information for crash reporting.

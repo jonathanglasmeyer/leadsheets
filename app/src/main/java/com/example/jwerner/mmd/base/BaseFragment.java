@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.jwerner.mmd.di.App;
+import com.example.jwerner.mmd.di.AppComponent;
 
 /**
  * Created by jwerner on 2/20/15.
@@ -16,10 +17,14 @@ public abstract class BaseFragment extends Fragment {
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setController();
 
         // Perform injection so that when this call returns all dependencies will be available for use.
-        ((App) getActivity().getApplication()).inject(this);
+//        App.get(getActivity()).component().inject(this);
+        App app = App.get(getActivity());
+        onCreateComponent(app.component());
+
+        // this has to happen after the fragment injection
+        setController();
     }
 
     public void setController() {
@@ -52,4 +57,6 @@ public abstract class BaseFragment extends Fragment {
         }
 
     }
+
+    protected abstract void onCreateComponent(AppComponent appComponent);
 }

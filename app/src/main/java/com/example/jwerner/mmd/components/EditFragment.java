@@ -14,6 +14,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.jwerner.mmd.R;
 import com.example.jwerner.mmd.base.BaseFragment;
 import com.example.jwerner.mmd.components.setlist.SetlistData;
+import com.example.jwerner.mmd.di.AppComponent;
 import com.example.jwerner.mmd.helpers.Dialog;
 import com.example.jwerner.mmd.lib.FluentBundle;
 import com.example.jwerner.mmd.lib.FragmentArgsSetter;
@@ -34,10 +35,8 @@ public class EditFragment extends BaseFragment {
     public static final String FILEPATH = "text";
     @InjectView(R.id.edit_text)
     EditText mEditText;
-    @Inject
-    FileStore mFileStore;
-    @Inject
-    SetlistData mSetlistData;
+    @Inject FileStore mFileStore;
+    @Inject SetlistData mSetlistData;
     private File mFilePath;
     private boolean mDeleteMode;
 
@@ -47,23 +46,20 @@ public class EditFragment extends BaseFragment {
         return FragmentArgsSetter.setFragmentArguments(new EditFragment(), bundle);
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+    @Nullable @Override public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_edit, container, false);
         ButterKnife.inject(this, view);
         setHasOptionsMenu(true);
         return view;
     }
 
-    @Override
-    public void onResume() {
+
+    @Override public void onResume() {
         mDeleteMode = false;
         super.onResume();
     }
 
-    @Override
-    public void onStop() {
+    @Override public void onStop() {
         super.onStop();
         if (!mDeleteMode) {
             // only write on back press if we aren't exiting because of a delete operation
@@ -71,21 +67,18 @@ public class EditFragment extends BaseFragment {
         }
     }
 
-    @Override
-    public void onViewCreated(final View view, final Bundle savedInstanceState) {
+    @Override public void onViewCreated(final View view, final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mFilePath = new File(getArguments().getString(FILEPATH));
         mEditText.setText(mFileStore.getContent(mFilePath));
 
     }
 
-    @Override
-    public void onCreate(final Bundle savedInstanceState) {
+    @Override public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(final MenuItem item) {
+    @Override public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_remove:
                 Dialog.showQuestionDialog(getActivity(), "Do you want to remove this song?", "Remove", new MaterialDialog.ButtonCallback() {
@@ -106,9 +99,13 @@ public class EditFragment extends BaseFragment {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
+    @Override public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
         inflater.inflate(R.menu.menu_edit, menu);
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override protected void onCreateComponent(AppComponent appComponent) {
+        appComponent.inject(this);
+
     }
 }
