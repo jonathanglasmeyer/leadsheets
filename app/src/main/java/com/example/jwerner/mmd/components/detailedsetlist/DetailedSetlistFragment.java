@@ -77,7 +77,7 @@ public class DetailedSetlistFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         ArrayList<String[]> initialContent = getFNameContentTuples();
         mDetailedSetlistAdapter = new DetailedSetlistAdapter(getActivity(),
-                R.layout.list_item_detailed, initialContent);
+                initialContent);
         mDetailedSetlist.setAdapter(mDetailedSetlistAdapter);
         final int position = getArguments().getInt("position") - 1;
         mDetailedSetlist.setSelection(position);

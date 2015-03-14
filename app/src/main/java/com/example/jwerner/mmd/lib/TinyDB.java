@@ -37,8 +37,8 @@ import javax.inject.Singleton;
 
 @Singleton public class TinyDB {
     public static String lastImagePath = "";
-    Context mContext;
-    SharedPreferences preferences;
+    final Context mContext;
+    final SharedPreferences preferences;
     String DEFAULT_APP_IMAGEDATA_DIRECTORY;
     File mFolder = null;
 
@@ -93,8 +93,7 @@ import javax.inject.Singleton;
                 // Toast("Default Save Path Creation Error");
             }
         }
-        String savePath = mFolder.getPath() + '/' + imageName;
-        return savePath;
+        return mFolder.getPath() + '/' + imageName;
     }
 
     private boolean saveBitmapPNG(String strFileName, Bitmap bitmap) {
@@ -163,8 +162,7 @@ import javax.inject.Singleton;
     public double getDouble(String key) {
         String number = getString(key);
         try {
-            double value = Double.parseDouble(number);
-            return value;
+            return Double.parseDouble(number);
         } catch (NumberFormatException e) {
             return 0;
         }
@@ -252,7 +250,7 @@ import javax.inject.Singleton;
     public void putListBoolean(String key, ArrayList<Boolean> marray) {
         ArrayList<String> origList = new ArrayList<String>();
         for (Boolean b : marray) {
-            if (b == true) {
+            if (b) {
                 origList.add("true");
             } else {
                 origList.add("false");
@@ -291,9 +289,8 @@ import javax.inject.Singleton;
         // seprating the items in the list
         String[] mylist = TextUtils
                 .split(preferences.getString(key, ""), "‚‗‚");
-        ArrayList<String> gottenlist = new ArrayList<String>(
+        return new ArrayList<String>(
                 Arrays.asList(mylist));
-        return gottenlist;
     }
 
     public void putBoolean(String key, boolean value) {
@@ -324,8 +321,7 @@ import javax.inject.Singleton;
 
     public Boolean deleteImage(String path) {
         File tobedeletedImage = new File(path);
-        Boolean isDeleted = tobedeletedImage.delete();
-        return isDeleted;
+        return tobedeletedImage.delete();
     }
 
     public void clear() {

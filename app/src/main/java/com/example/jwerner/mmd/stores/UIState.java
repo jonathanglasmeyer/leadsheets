@@ -13,7 +13,7 @@ import javax.inject.Singleton;
     public static final String FOLDERS = "Folders";
     public static boolean alphabetMode = false;
     public static boolean lock;
-    private boolean dragMode;
+    private final boolean dragMode;
 
     @Inject public UIState() {
        dragMode = false;

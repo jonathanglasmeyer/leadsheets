@@ -180,8 +180,8 @@ public class FileStore {
     }
 
     public static class Folder {
-        public String name;
-        public int count;
+        public final String name;
+        public final int count;
 
         public Folder(String name, int count) {
             this.name = name;

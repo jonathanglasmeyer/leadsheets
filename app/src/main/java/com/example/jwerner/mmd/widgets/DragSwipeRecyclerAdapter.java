@@ -34,10 +34,10 @@ public abstract class DragSwipeRecyclerAdapter
         implements DraggableItemAdapter<DragSwipeRecyclerAdapter.MyViewHolder>,
         SwipeableItemAdapter<DragSwipeRecyclerAdapter.MyViewHolder> {
 
+    private final AbstractDataProvider mDataProvider;
     public int mLastLongClickedPosition;
     @Inject
     Resources mResources;
-    private AbstractDataProvider mDataProvider;
     private boolean mDragMode = false;
 
     protected DragSwipeRecyclerAdapter(AbstractDataProvider dataProvider) {
@@ -240,8 +240,8 @@ public abstract class DragSwipeRecyclerAdapter
         notifyItemMoved(fromPosition, toPosition);
     }
 
-    public void onChangeItem(final int position) {
-        notifyItemChanged(position);
+    public void onChangeItem() {
+        notifyItemChanged(0);
     }
 
     @Override
@@ -303,15 +303,15 @@ public abstract class DragSwipeRecyclerAdapter
 
     public static class MyViewHolder extends AbstractDraggableSwipeableItemViewHolder {
 
-        public ViewGroup mContainerOuter;
-        public ViewGroup mContainer;
-        public View mDragHandle;
-        public ImageView mImage;
-        public ViewGroup mImageWrap;
-        public TextView mTextView;
-        public ViewGroup mDeleteButtonWrap;
-        public ImageButton mDeleteButton;
-        public ImageView mLockHint;
+        public final ViewGroup mContainerOuter;
+        public final ViewGroup mContainer;
+        public final View mDragHandle;
+        public final ImageView mImage;
+        public final ViewGroup mImageWrap;
+        public final TextView mTextView;
+        public final ViewGroup mDeleteButtonWrap;
+        public final ImageButton mDeleteButton;
+        public final ImageView mLockHint;
 
         public MyViewHolder(final View v) {
             super(v);

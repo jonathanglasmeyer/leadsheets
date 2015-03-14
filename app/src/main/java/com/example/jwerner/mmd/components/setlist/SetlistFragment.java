@@ -147,7 +147,7 @@ public class SetlistFragment extends DragSwipeRecyclerFragment implements HasCom
                 mSetlistData.toggleLockMode();
                 showLockSnackbarHint(UIState.lock);
                 setLockToggleIcon(item);
-                mSetlistAdapter.onChangeItem(0);
+                mSetlistAdapter.onChangeItem();
                 mSetlistAdapter.notifyDataSetChanged();
 //                refresh();
                 break;

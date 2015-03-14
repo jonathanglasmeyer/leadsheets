@@ -18,14 +18,14 @@ import java.util.List;
  * Created by jwerner on 2/20/15.
  */
 public class DetailedSetlistAdapter extends ArrayAdapter {
-    private Context mContext;
-    private int id;
-    private List<String[]> items;
+    private final Context mContext;
+    private final int id;
+    private final List<String[]> items;
 
-    public DetailedSetlistAdapter(Context context, int textViewResourceId, List<String[]> list) {
-        super(context, textViewResourceId, list);
+    public DetailedSetlistAdapter(Context context, List<String[]> list) {
+        super(context, R.layout.list_item_detailed, list);
         mContext = context;
-        id = textViewResourceId;
+        id = R.layout.list_item_detailed;
         items = list;
     }
 

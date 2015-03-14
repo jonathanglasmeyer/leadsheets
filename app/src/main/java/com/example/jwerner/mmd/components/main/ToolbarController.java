@@ -17,12 +17,12 @@ public class ToolbarController extends Controller {
     private final View mDecorView;
     private final Toolbar mToolbar;
     private final MainActivity mContext;
+    private final View mContentFrame;
+    private final View mHeader;
     private boolean mShowToolbar = true;
     private int mValue;
     private int mPaddingTop = 0;
     private float mY;
-    private View mContentFrame;
-    private View mHeader;
 
     protected ToolbarController(final Context context) {
         super(context);

@@ -32,7 +32,7 @@ import timber.log.Timber;
     public static final int ITEM_TYPE_REST = 1;
     public static final int ITEM_TYPE_ALPHABETICAL = 3;
     public static final String HOLD = "_hold";
-    public boolean mSortable = true;
+    public final boolean mSortable = true;
     @Inject TinyDB mTinyDB;
     @Inject Resources mResources;
     @Inject FileStore mFileStore;
@@ -62,15 +62,13 @@ import timber.log.Timber;
         getSetlistData();
     }
 
-
     private void getSetlistData() {
         mFileNames = mFileStore.getFilenamesForFolder(mCurrentDir);
         mSetlist = mTinyDB.getList(mCurrentDir);
         UIState.setLock(getLockMode());
 
         mData = new LinkedList<>();
-        mData.add(new ConcreteData(mData.size(), 1, ITEM_TYPE_CAPTION, mResources.getString(R.string.setlist), null))
-        ;
+        mData.add(new ConcreteData(mData.size(), 1, ITEM_TYPE_CAPTION, mResources.getString(R.string.setlist), null));
 
         for (String songName : mSetlist) {
             final int id = mData.size();
@@ -110,7 +108,6 @@ import timber.log.Timber;
         mFileNames = mFileStore.getFilenamesForFolder(mCurrentDir);
         mData = new LinkedList<>();
         mData.add(new ConcreteData(mData.size(), 1, ITEM_TYPE_CAPTION, mResources.getString(R.string.library), null));
-
 
         for (String songName : mFileNames) {
             final int id = mData.size();
@@ -184,7 +181,6 @@ import timber.log.Timber;
             return position;
         }
 
-//        emitContentChange();
     }
 
     private void emitContentChange() {
@@ -259,7 +255,7 @@ import timber.log.Timber;
         private final long mId;
         private final int mViewType;
         private final String mText;
-        private File mFilePath;
+        private final File mFilePath;
         private int mItemType;
         private int mSwipeReaction;
 
