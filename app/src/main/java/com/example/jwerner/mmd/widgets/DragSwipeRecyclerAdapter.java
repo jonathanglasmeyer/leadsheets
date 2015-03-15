@@ -98,12 +98,7 @@ public abstract class DragSwipeRecyclerAdapter
         if (item.getText().equals("Setlist") && holder.mDeleteButtonWrap != null) {
             if (!UIState.lock) {
                 holder.mDeleteButtonWrap.setVisibility(View.VISIBLE);
-                holder.mDeleteButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(final View v) {
-                        handleReset();
-                    }
-                });
+                holder.mDeleteButton.setOnClickListener(v -> handleReset());
             }
             if (UIState.lock) {
                 holder.mLockHint.setVisibility(View.VISIBLE);
@@ -240,8 +235,8 @@ public abstract class DragSwipeRecyclerAdapter
         notifyItemMoved(fromPosition, toPosition);
     }
 
-    public void onChangeItem() {
-        notifyItemChanged(0);
+    public void onChangeItem(int position) {
+        notifyItemChanged(position);
     }
 
     @Override
@@ -289,16 +284,13 @@ public abstract class DragSwipeRecyclerAdapter
         final int position = holder.getPosition();
 
         if (reaction == RecyclerViewSwipeManager.AFTER_SWIPE_REACTION_REMOVE_ITEM) {
-            int newPosition = mDataProvider.removeItem(position);
-
-            if (newPosition == position) {
-                notifyItemRemoved(position);
-            } else {
-                notifyItemMoved(position, newPosition);
-                notifyItemChanged(newPosition);
-            }
+            handleSwipeRight(position);
+//            mDataProvider.removeItem(position);
+//
         }
     }
+
+    protected abstract void handleSwipeRight(int position);
 
 
     public static class MyViewHolder extends AbstractDraggableSwipeableItemViewHolder {

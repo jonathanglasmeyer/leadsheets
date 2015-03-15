@@ -9,7 +9,7 @@ public abstract class AbstractDataProvider {
 
     public abstract Data getItem(int index);
 
-    public abstract int removeItem(int position);
+    public abstract void removeItem(int position);
 
     public abstract void moveItem(int fromPosition, int toPosition);
 

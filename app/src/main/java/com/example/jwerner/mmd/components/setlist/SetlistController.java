@@ -10,14 +10,18 @@ import com.example.jwerner.mmd.R;
 import com.example.jwerner.mmd.base.Controller;
 import com.example.jwerner.mmd.components.EditFragment;
 import com.example.jwerner.mmd.di.helper.Bus;
-import com.example.jwerner.mmd.events.ChangeContent;
-import com.example.jwerner.mmd.events.ChangeItem;
+import com.example.jwerner.mmd.events.AllSongsChanged;
 import com.example.jwerner.mmd.events.SetlistGeneralClick;
 import com.example.jwerner.mmd.events.SetlistItemClick;
 import com.example.jwerner.mmd.events.SetlistReorder;
 import com.example.jwerner.mmd.events.SetlistReset;
 import com.example.jwerner.mmd.events.ShowUndoSnackbar;
+import com.example.jwerner.mmd.events.SongChanged;
+import com.example.jwerner.mmd.events.SongMoved;
+import com.example.jwerner.mmd.events.SongRemoved;
 import com.example.jwerner.mmd.events.SongRename;
+import com.example.jwerner.mmd.events.ToggleAlphabeticMode;
+import com.example.jwerner.mmd.events.ToggleLockMode;
 import com.example.jwerner.mmd.helpers.Dialog;
 import com.example.jwerner.mmd.stores.UIState;
 import com.google.common.base.Preconditions;
@@ -83,11 +87,37 @@ public class SetlistController extends Controller {
                 mSetlistData.renameItem(event.position, s));
     }
 
-    @Bus public void onEvent(final ChangeContent event) {
+    @Bus public void onEvent(final ToggleLockMode event) {
+        mSetlistData.toggleLockMode();
+        mFragment.showLockSnackbarHint(UIState.lock);
+        mFragment.setLockToggleIcon(event.item);
+        mSetlistAdapter.onChangeItem(0); // update the caption at position 0 to show/hide the delete button
+        mSetlistAdapter.notifyDataSetChanged(); // all items have to be notified that the click listeners should update
+    }
+
+    @Bus public void onEvent(final ToggleAlphabeticMode event) {
+        mFragment.switchMode();
+        mFragment.setAlphabeticToggleIcon(event.item);
+    }
+
+    @Bus public void onEvent(final SongRemove event) {
+        mSetlistData.removeItem(event.position);
+    }
+
+    @Bus public void onEvent(final SongRemoved event) {
+        mSetlistAdapter.notifyItemRemoved(event.position);
+    }
+
+    @Bus public void onEvent(final SongMoved event) {
+        mSetlistAdapter.notifyItemMoved(event.oldPosition, event.newPosition);
+    }
+
+    // TODO: deprecate this because of animation glitches
+    @Bus public void onEvent(final AllSongsChanged event) {
         mFragment.refresh();
     }
 
-    @Bus public void onEvent(final ChangeItem event) {
+    @Bus public void onEvent(final SongChanged event) {
         mSetlistAdapter.notifyItemChanged(event.position);
     }
 

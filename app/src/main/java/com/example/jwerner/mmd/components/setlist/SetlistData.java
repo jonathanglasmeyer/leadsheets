@@ -2,9 +2,11 @@ package com.example.jwerner.mmd.components.setlist;
 
 import com.example.jwerner.mmd.R;
 import com.example.jwerner.mmd.data.AbstractDataProvider;
-import com.example.jwerner.mmd.events.ChangeContent;
-import com.example.jwerner.mmd.events.ChangeItem;
+import com.example.jwerner.mmd.events.AllSongsChanged;
+import com.example.jwerner.mmd.events.SongChanged;
 import com.example.jwerner.mmd.events.ShowUndoSnackbar;
+import com.example.jwerner.mmd.events.SongMoved;
+import com.example.jwerner.mmd.events.SongRemoved;
 import com.example.jwerner.mmd.helpers.Resources;
 import com.example.jwerner.mmd.helpers.Strings;
 import com.example.jwerner.mmd.lib.TinyDB;
@@ -161,17 +163,18 @@ import timber.log.Timber;
         final ConcreteData item = mData.get(position);
         mFileStore.renameSong(item.getFilePath(), newName);
         mData.get(position).setText(newName);
-        emitItemChange(position);
+        emitSongChanged(position);
     }
 
-    private void emitItemChange(int position) {
-        EventBus.getDefault().post(new ChangeItem(position));
+    private void emitSongChanged(int position) {
+        EventBus.getDefault().post(new SongChanged(position));
     }
 
-    public int removeItem(int position) {
-//        mLastRemovedData = mData.remove(position);
+    public void removeItem(int position) {
         final ConcreteData item = mData.get(position);
+
         if (item.getItemType() == ITEM_TYPE_SETLIST) {
+            // move setlist item down
 
             item.convertToRestItem();
             mData.set(position, item);
@@ -180,7 +183,10 @@ import timber.log.Timber;
             final int newPosition = getRestInsertPos(item.getText());
             mData.add(newPosition, item);
             backupSetlist();
-            return newPosition;
+
+            emitSongMoved(position, newPosition);
+            emitSongChanged(newPosition);
+
         } else {
             // delete song (move to .archive)
             final File filePath = item.getFilePath();
@@ -190,13 +196,21 @@ import timber.log.Timber;
             mLastRemovedData = item;
             EventBus.getDefault().post(new ShowUndoSnackbar());
             Timber.d("removeItem: " + filePath);
-            return position;
+            emitSongRemoved(position);
         }
 
     }
 
-    private void emitContentChange() {
-        EventBus.getDefault().postSticky(new ChangeContent());
+    private void emitSongRemoved(int position) {
+        EventBus.getDefault().post(new SongRemoved(position));
+    }
+
+    private void emitAllSongsChanged() {
+        EventBus.getDefault().postSticky(new AllSongsChanged());
+    }
+
+    private void emitSongMoved(int oldPosition, int newPosition) {
+        EventBus.getDefault().post(new SongMoved(oldPosition, newPosition));
     }
 
     public void restoreItem(ConcreteData item) {
@@ -256,7 +270,7 @@ import timber.log.Timber;
             mLastRemovedData = null;
             mLastRemovedPosition = -1;
         }
-        emitContentChange();
+        emitAllSongsChanged();
     }
 
     public static final class ConcreteData extends Data {

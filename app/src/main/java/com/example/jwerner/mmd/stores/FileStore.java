@@ -2,7 +2,7 @@ package com.example.jwerner.mmd.stores;
 
 import android.os.Environment;
 
-import com.example.jwerner.mmd.events.ChangeContent;
+import com.example.jwerner.mmd.events.AllSongsChanged;
 import com.example.jwerner.mmd.events.ChangeFolders;
 import com.example.jwerner.mmd.helpers.Strings;
 import com.google.common.base.Charsets;
@@ -142,7 +142,7 @@ public class FileStore {
     }
 
     private void emitContentChange() {
-        EventBus.getDefault().postSticky(new ChangeContent());
+        EventBus.getDefault().postSticky(new AllSongsChanged());
     }
 
     public void newFile(File filePath) {

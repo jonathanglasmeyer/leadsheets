@@ -10,7 +10,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import de.greenrobot.event.EventBus;
-import timber.log.Timber;
 
 /**
  * Created by jwerner on 2/9/15.
@@ -36,7 +35,6 @@ import timber.log.Timber;
 
     @Override
     protected void handleReset() {
-        Timber.d("handleReset: ");
         EventBus.getDefault().post(new SetlistReset());
     }
 
@@ -61,6 +59,10 @@ import timber.log.Timber;
 
     @Override protected boolean canStartDrag() {
         return mSetlistData.mSortable;
+    }
+
+    @Override protected void handleSwipeRight(int position) {
+        EventBus.getDefault().post(new SongRemove(position));
     }
 
     @Override public ItemDraggableRange onGetItemDraggableRange(final MyViewHolder myViewHolder) {
