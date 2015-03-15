@@ -16,6 +16,8 @@ import com.example.jwerner.mmd.base.Controller;
 import com.example.jwerner.mmd.base.HasComponent;
 import com.example.jwerner.mmd.di.AppComponent;
 import com.example.jwerner.mmd.events.SongRename;
+import com.example.jwerner.mmd.events.ToggleAlphabeticMode;
+import com.example.jwerner.mmd.events.ToggleLockMode;
 import com.example.jwerner.mmd.lib.FluentBundle;
 import com.example.jwerner.mmd.lib.FragmentArgsSetter;
 import com.example.jwerner.mmd.stores.UIState;
@@ -79,7 +81,7 @@ public class SetlistFragment extends DragSwipeRecyclerFragment implements HasCom
     }
 
 
-    private void switchMode() {
+    void switchMode() {
         UIState.alphabetMode = !UIState.alphabetMode;
         if (UIState.alphabetMode) {
             mSetlistData.setAlphabeticalMode(true);
@@ -90,7 +92,7 @@ public class SetlistFragment extends DragSwipeRecyclerFragment implements HasCom
 //        getActivity().invalidateOptionsMenu();
     }
 
-    private void setAlphabeticToggleIcon(MenuItem item) {
+    void setAlphabeticToggleIcon(MenuItem item) {
         if (UIState.alphabetMode) {
             item.setIcon(R.drawable.ic_format_list_numbered_white_24dp);
 //            menuItemLock.setVisible(false);
@@ -100,7 +102,7 @@ public class SetlistFragment extends DragSwipeRecyclerFragment implements HasCom
         }
     }
 
-    private void setLockToggleIcon(MenuItem item) {
+    void setLockToggleIcon(MenuItem item) {
         if (UIState.lock) {
             item.setIcon(R.drawable.ic_lock_open_white_24dp);
         } else {
@@ -113,18 +115,10 @@ public class SetlistFragment extends DragSwipeRecyclerFragment implements HasCom
         menuItemLock = menu.findItem(R.id.action_lock);
         setAlphabeticToggleIcon(menu.findItem(R.id.action_alphabetical));
         setLockToggleIcon(menuItemLock);
-//        if (UIState.alphabetMode) {
-//            menu.findItem(R.id.action_lock).setVisible(false);
-//        } else {
-//            menu.findItem(R.id.action_lock).setVisible(true);
-//        }
-//        final Switch switch_ = (Switch) menu.findItem(R.id.action_switch).getActionView().findViewById(R.id.switch_mode);
-//        switch_.setChecked(UIState.alphabetMode);
-//        switch_.setOnCheckedChangeListener((buttonView, isChecked) -> switchMode(isChecked));
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    private void showLockSnackbarHint(boolean isLockedNow) {
+    void showLockSnackbarHint(boolean isLockedNow) {
         SnackbarManager.show(
                 Snackbar.with(getActivity().getApplicationContext())
                         .text(isLockedNow ? "Setlist locked" : "Setlist unlocked")
@@ -135,35 +129,16 @@ public class SetlistFragment extends DragSwipeRecyclerFragment implements HasCom
     }
 
     @Override public boolean onOptionsItemSelected(final MenuItem item) {
-        final int itemId = item.getItemId();
-
-        switch (itemId) {
-//            case R.id.action_reorder:
-//                EventBus.getDefault().post(new SetlistReorder(true));
-//                mMenu.clear();
-//                mMenuInflater.inflate(R.menu.menu_done, mMenu);
-//                break;
+        switch (item.getItemId()) {
 
             case R.id.action_lock:
-                mSetlistData.toggleLockMode();
-                showLockSnackbarHint(UIState.lock);
-                setLockToggleIcon(item);
-                mSetlistAdapter.onChangeItem();
-                mSetlistAdapter.notifyDataSetChanged();
-//                refresh();
+                EventBus.getDefault().post(new ToggleLockMode(item));
                 break;
 
             case R.id.action_alphabetical:
-                switchMode();
-                setAlphabeticToggleIcon(item);
+                EventBus.getDefault().post(new ToggleAlphabeticMode(item));
                 break;
 
-//            case R.id.action_numerical:
-//                break;
-
-//            case R.id.action_reset:
-
-//                break;
             default:
                 break;
         }
@@ -187,7 +162,7 @@ public class SetlistFragment extends DragSwipeRecyclerFragment implements HasCom
         final int position = mSetlistAdapter.mLastLongClickedPosition;
         switch (item.getItemId()) {
             case R.id.action_remove:
-                mSetlistData.removeItem(position);
+                EventBus.getDefault().post(new SongRemove(position));
                 return true;
 
             case R.id.action_rename:

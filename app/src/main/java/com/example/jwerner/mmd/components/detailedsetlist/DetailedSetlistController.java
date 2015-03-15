@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.example.jwerner.mmd.base.Controller;
 import com.example.jwerner.mmd.di.helper.Bus;
-import com.example.jwerner.mmd.events.ChangeContent;
+import com.example.jwerner.mmd.events.AllSongsChanged;
 
 /**
  * Created by jwerner on 3/6/15.
@@ -17,7 +17,7 @@ public class DetailedSetlistController extends Controller {
         mFragment = fragment;
     }
 
-    @Bus public void onEventMainThread(final ChangeContent event) {
+    @Bus public void onEventMainThread(final AllSongsChanged event) {
         mFragment.refresh();
 
     }
