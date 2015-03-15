@@ -1,0 +1,13 @@
+package net.jonathanwerner.leadsheets.events;
+
+/**
+ * Created by jwerner on 2/24/15.
+ */
+public class SetlistReorder {
+    public final boolean reorderMode;
+
+    public SetlistReorder(final boolean reorderMode) {
+
+        this.reorderMode = reorderMode;
+    }
+}

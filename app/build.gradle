@@ -17,7 +17,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.example.jwerner.mmd"
+        applicationId "net.jonathanwerner.leadsheets"
         minSdkVersion 15
         targetSdkVersion 21
         versionCode 1
@@ -39,7 +39,7 @@ apt {
 
         // If you're using Android NBS flavors you should use the following line instead of hard-coded packageName
         //resourcePackageName android.defaultConfig.packageName
-        resourcePackageName "com.example.jwerner.mmd"
+        resourcePackageName "com.jwerner.mmd"
     }
 }
 

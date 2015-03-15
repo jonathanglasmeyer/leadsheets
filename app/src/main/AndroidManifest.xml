@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.jwerner.mmd">
+          package="net.jonathanwerner.leadsheets">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".di.App"
+        android:name="net.jonathanwerner.leadsheets.di.App"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".components.main.MainActivity"
+            android:name="net.jonathanwerner.leadsheets.components.main.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,20 +21,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DetailListActivity"
+            android:name="net.jonathanwerner.leadsheets.DetailListActivity"
             android:label="@string/title_activity_detaillist"
-            android:parentActivityName=".components.main.MainActivity">
+            android:parentActivityName="net.jonathanwerner.leadsheets.components.main.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.jwerner.mmd.components.main.MainActivity" />
+                android:value="net.jonathanwerner.leadsheets.components.main.MainActivity"/>
         </activity>
         <activity
-            android:name=".components.EditActivity"
+            android:name="net.jonathanwerner.leadsheets.components.EditActivity"
             android:label="@string/title_activity_edit"
-            android:parentActivityName=".components.main.MainActivity">
+            android:parentActivityName="net.jonathanwerner.leadsheets.components.main.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.jwerner.mmd.components.main.MainActivity" />
+                android:value="net.jonathanwerner.leadsheets.components.main.MainActivity"/>
         </activity>
     </application>
 
