@@ -15,6 +15,7 @@ import com.example.jwerner.mmd.R;
 import com.example.jwerner.mmd.base.Controller;
 import com.example.jwerner.mmd.base.HasComponent;
 import com.example.jwerner.mmd.di.AppComponent;
+import com.example.jwerner.mmd.events.SongRename;
 import com.example.jwerner.mmd.lib.FluentBundle;
 import com.example.jwerner.mmd.lib.FragmentArgsSetter;
 import com.example.jwerner.mmd.stores.UIState;
@@ -25,7 +26,7 @@ import com.nispok.snackbar.enums.SnackbarType;
 
 import javax.inject.Inject;
 
-import timber.log.Timber;
+import de.greenrobot.event.EventBus;
 
 public class SetlistFragment extends DragSwipeRecyclerFragment implements HasComponent<AppComponent> {
     public static final String FOLDER_NAME = "folderName";
@@ -183,13 +184,16 @@ public class SetlistFragment extends DragSwipeRecyclerFragment implements HasCom
 
     @Override
     public boolean onContextItemSelected(final MenuItem item) {
+        final int position = mSetlistAdapter.mLastLongClickedPosition;
         switch (item.getItemId()) {
             case R.id.action_remove:
-                final int position = mSetlistAdapter.mLastLongClickedPosition;
-                final SetlistData.ConcreteData item1 = (SetlistData.ConcreteData) mSetlistAdapter.getItem(position);
-                Timber.d("onContextItemSelected: " + item1.getText());
                 mSetlistData.removeItem(position);
                 return true;
+
+            case R.id.action_rename:
+                EventBus.getDefault().post(new SongRename(position));
+                return true;
+
             default:
                 return super.onContextItemSelected(item);
         }

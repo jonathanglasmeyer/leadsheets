@@ -3,6 +3,7 @@ package com.example.jwerner.mmd.components.setlist;
 import com.example.jwerner.mmd.R;
 import com.example.jwerner.mmd.data.AbstractDataProvider;
 import com.example.jwerner.mmd.events.ChangeContent;
+import com.example.jwerner.mmd.events.ChangeItem;
 import com.example.jwerner.mmd.events.ShowUndoSnackbar;
 import com.example.jwerner.mmd.helpers.Resources;
 import com.example.jwerner.mmd.helpers.Strings;
@@ -68,14 +69,14 @@ import timber.log.Timber;
         UIState.setLock(getLockMode());
 
         mData = new LinkedList<>();
-        mData.add(new ConcreteData(mData.size(), 1, ITEM_TYPE_CAPTION, mResources.getString(R.string.setlist), null));
+        mData.add(new ConcreteData(mData.size(), 1, ITEM_TYPE_CAPTION, mResources.getString(R.string.caption_setlist), null));
 
         for (String songName : mSetlist) {
             final int id = mData.size();
             final int viewType = 0;
             mData.add(new ConcreteData(id, viewType, ITEM_TYPE_SETLIST, songName, getShortFilePath(songName)));
         }
-        mData.add(new ConcreteData(mData.size(), 1, ITEM_TYPE_CAPTION, mResources.getString(R.string.rest), null));
+        mData.add(new ConcreteData(mData.size(), 1, ITEM_TYPE_CAPTION, mResources.getString(R.string.caption_rest), null));
 
         for (String songName : songsNotInSetlist()) {
             final int viewType = 0;
@@ -107,7 +108,7 @@ import timber.log.Timber;
         mAlphabeticalMode = true;
         mFileNames = mFileStore.getFilenamesForFolder(mCurrentDir);
         mData = new LinkedList<>();
-        mData.add(new ConcreteData(mData.size(), 1, ITEM_TYPE_CAPTION, mResources.getString(R.string.library), null));
+        mData.add(new ConcreteData(mData.size(), 1, ITEM_TYPE_CAPTION, mResources.getString(R.string.caption_library), null));
 
         for (String songName : mFileNames) {
             final int id = mData.size();
@@ -154,6 +155,17 @@ import timber.log.Timber;
             throw new IndexOutOfBoundsException("index = " + index);
         }
         return mData.get(index);
+    }
+
+    public void renameItem(int position, String newName) {
+        final ConcreteData item = mData.get(position);
+        mFileStore.renameSong(item.getFilePath(), newName);
+        mData.get(position).setText(newName);
+        emitItemChange(position);
+    }
+
+    private void emitItemChange(int position) {
+        EventBus.getDefault().post(new ChangeItem(position));
     }
 
     public int removeItem(int position) {
@@ -254,7 +266,7 @@ import timber.log.Timber;
         public static final int REACTION_ALPHABETICAL_ITEM = RecyclerViewSwipeManager.REACTION_CAN_SWIPE_RIGHT;
         private final long mId;
         private final int mViewType;
-        private final String mText;
+        private String mText;
         private final File mFilePath;
         private int mItemType;
         private int mSwipeReaction;
@@ -273,8 +285,12 @@ import timber.log.Timber;
             mId = id;
             mViewType = viewType;
             mItemType = itemType;
-            mText = itemType == ITEM_TYPE_CAPTION ? text : Strings.capitalize(text);
+            setText(text);
             mFilePath = filePath;
+        }
+
+        public void setText(String newText) {
+            mText = mItemType == ITEM_TYPE_CAPTION ? newText : Strings.capitalize(newText);
         }
 
         public File getFilePath() {

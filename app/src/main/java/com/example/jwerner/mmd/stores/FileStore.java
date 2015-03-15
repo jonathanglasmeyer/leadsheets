@@ -58,6 +58,11 @@ public class FileStore {
         return folders;
     }
 
+    public void renameSong(File song, String newName) {
+        boolean b = song.renameTo(new File(song.getParentFile(), newName.trim() + ".txt"));
+        Timber.d("renameSong: " + b);
+    }
+
     public ArrayList<String> getFilenamesForFolder(String folder) {
         File fullPath = new File(mRootPath, folder);
 
