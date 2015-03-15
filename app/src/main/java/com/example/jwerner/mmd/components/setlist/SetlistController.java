@@ -11,11 +11,13 @@ import com.example.jwerner.mmd.base.Controller;
 import com.example.jwerner.mmd.components.EditFragment;
 import com.example.jwerner.mmd.di.helper.Bus;
 import com.example.jwerner.mmd.events.ChangeContent;
+import com.example.jwerner.mmd.events.ChangeItem;
 import com.example.jwerner.mmd.events.SetlistGeneralClick;
 import com.example.jwerner.mmd.events.SetlistItemClick;
 import com.example.jwerner.mmd.events.SetlistReorder;
 import com.example.jwerner.mmd.events.SetlistReset;
 import com.example.jwerner.mmd.events.ShowUndoSnackbar;
+import com.example.jwerner.mmd.events.SongRename;
 import com.example.jwerner.mmd.helpers.Dialog;
 import com.example.jwerner.mmd.stores.UIState;
 import com.google.common.base.Preconditions;
@@ -76,8 +78,17 @@ public class SetlistController extends Controller {
         }
     }
 
+    @Bus public void onEvent(final SongRename event) {
+        Dialog.showInputDialog(mActivityContext, "Rename Song", "Rename", s ->
+                mSetlistData.renameItem(event.position, s));
+    }
+
     @Bus public void onEvent(final ChangeContent event) {
         mFragment.refresh();
+    }
+
+    @Bus public void onEvent(final ChangeItem event) {
+        mSetlistAdapter.notifyItemChanged(event.position);
     }
 
     @Bus public void onEvent(ShowUndoSnackbar event) {
@@ -123,10 +134,5 @@ public class SetlistController extends Controller {
             }
         });
     }
-
-//    private SetlistFragment getFragment() {
-//        return ((SetlistFragment) ((MainActivity) mActivityContext).getFragmentManager().findFragmentByTag(MainActivity.FRAGMENT_LIST_VIEW));
-//    }
-
 
 }

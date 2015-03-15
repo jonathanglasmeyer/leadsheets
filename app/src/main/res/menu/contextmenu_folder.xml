@@ -6,13 +6,13 @@
         android:id="@+id/action_remove"
         android:icon="@drawable/ic_delete_white_24dp"
         android:orderInCategory="100"
-        android:title="Remove"
-        app:showAsAction="always" />
+        android:title="@string/action_remove"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_rename"
         android:icon="@drawable/ic_delete_white_24dp"
         android:orderInCategory="200"
-        android:title="Rename"
-        app:showAsAction="always" />
+        android:title="@string/action_rename"
+        app:showAsAction="ifRoom" />
 </menu>
 

@@ -26,6 +26,7 @@ android {
     buildTypes {
         release {
             minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
@@ -60,6 +61,8 @@ dependencies {
     compile group: 'com.google.guava', name: 'guava', version: '18.0'
     compile 'com.jakewharton:butterknife:6.1.0'
     compile 'de.greenrobot:eventbus:2.4.0'
+    compile 'io.reactivex:rxjava:1.0.0'
+
 
     // ui
     compile 'com.afollestad:material-dialogs:0.6.3.1'
@@ -70,6 +73,7 @@ dependencies {
 
     // else
     provided 'javax.annotation:jsr250-api:1.0'
+
 
     // testing
     // Espresso 2 Dependencies
