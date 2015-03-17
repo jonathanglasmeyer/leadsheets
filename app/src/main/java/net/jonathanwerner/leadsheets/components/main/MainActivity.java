@@ -49,6 +49,7 @@ import timber.log.Timber;
 
 
 public class MainActivity extends BaseActivity {
+    // trello test
     public static final String SKU_SUCCESS = "android.test.purchased";
     public static final String SKU_DISABLE_ADS = "disable_ads";
     @InjectView(R.id.toolbar) protected Toolbar mToolbar;
