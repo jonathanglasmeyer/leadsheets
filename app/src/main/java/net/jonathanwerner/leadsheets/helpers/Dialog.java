@@ -7,6 +7,9 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.nispok.snackbar.Snackbar;
+import com.nispok.snackbar.SnackbarManager;
+import com.nispok.snackbar.enums.SnackbarType;
 
 import net.jonathanwerner.leadsheets.R;
 
@@ -28,7 +31,7 @@ public class Dialog {
                 .callback(callback)
                 .show();
     }
-    
+
     public static void showInputDialog(Context activityContext, String title, String positiveAction,
                                        Action1<String> callback) {
         final View editTextLayout = ((Activity) activityContext).getLayoutInflater().inflate(R.layout.text_edit_dialog, null);
@@ -46,7 +49,8 @@ public class Dialog {
                         Editable text = ((EditText) dialog.getCustomView().findViewById(R.id.edit_text_dialog)).getText();
                         if (text.length() > 0) callback.call(String.valueOf(text));
                     }
-                }).show();
+                })
+                .show();
 
 //        new AlertDialog.Builder(activityContext)
 //                .setTitle(title)
@@ -57,5 +61,16 @@ public class Dialog {
 //                }).setNegativeButton("Cancel", null).show();
 //    }
     }
+
+    public static void showSnackbarInfo(Context activityContext, String string) {
+        SnackbarManager.show(
+                Snackbar.with(activityContext.getApplicationContext())
+                        .text(string)
+                        .duration(2000)
+                        .type(SnackbarType.SINGLE_LINE)
+                        .swipeToDismiss(false)
+                , (android.app.Activity) activityContext);
+    }
+
 
 }

@@ -27,7 +27,6 @@ public class App extends Application {
         setupTimber();
 
         buildComponentAndInject();
-        Timber.d("oncreate" + mtinydb);
 
     }
 

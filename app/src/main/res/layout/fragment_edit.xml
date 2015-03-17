@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:background="#fff"
         android:gravity="top"
-        android:inputType="none"
+        android:inputType="textVisiblePassword"
         android:paddingLeft="16dp"
         android:paddingTop="16dp"
         android:scrollbars="vertical"

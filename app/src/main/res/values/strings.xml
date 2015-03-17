@@ -21,5 +21,8 @@
     <string name="caption_setlist">Setlist</string>
     <string name="caption_rest">Rest</string>
     <string name="caption_library">Library</string>
+    <string name="banner_ad_unit_id">ca-app-pub-4499265558737121/4697313292</string>
+    <string name="action_remove_ads">Remove ads</string>
+
 
 </resources>

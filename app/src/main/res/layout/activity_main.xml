@@ -15,7 +15,7 @@
         android:paddingTop="?attr/actionBarSize">
     </FrameLayout>
 
-    <include layout="@layout/fab" />
+    <include layout="@layout/fab"/>
 
     <!--toolbar-->
     <LinearLayout

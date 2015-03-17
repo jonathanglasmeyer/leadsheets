@@ -16,6 +16,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import net.jonathanwerner.leadsheets.R;
 import net.jonathanwerner.leadsheets.base.BaseFragment;
 import net.jonathanwerner.leadsheets.base.Controller;
+import net.jonathanwerner.leadsheets.components.main.MainActivity;
 import net.jonathanwerner.leadsheets.di.AppComponent;
 import net.jonathanwerner.leadsheets.events.FolderClick;
 import net.jonathanwerner.leadsheets.helpers.Dialog;
@@ -69,6 +70,30 @@ public class FoldersFragment extends BaseFragment {
     public void onResume() {
         refresh();
         super.onResume();
+    }
+
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_remove_ads:
+                MainActivity mainActivity = (MainActivity) getActivity();
+                // TODO
+                Dialog.showSnackbarInfo(getActivity(), "Yet to be implemented.");
+//                if (mainActivity.mIabReady) {
+//                    Dialog.showSnackbarInfo(getActivity(), "i'm ready");
+
+//                    mainActivity.mIabHelper.launchPurchaseFlow(getActivity(), MainActivity.SKU_SUCCESS, 10001,
+//                            (result, info) -> {
+//                                if (result.isSuccess()) {
+//                                    Dialog.showSnackbarInfo(getActivity(), "buy sucess!");
+//                                } else {
+//                                    Dialog.showSnackbarInfo(getActivity(), "buy fail!");
+//                                }
+//                            }, "");
+//                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

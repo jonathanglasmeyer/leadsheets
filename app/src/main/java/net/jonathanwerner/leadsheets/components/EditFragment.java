@@ -34,8 +34,7 @@ import butterknife.InjectView;
 
 public class EditFragment extends BaseFragment {
     public static final String FILEPATH = "text";
-    @InjectView(R.id.edit_text)
-    EditText mEditText;
+    @InjectView(R.id.edit_text) EditText mEditText;
     @Inject FileStore mFileStore;
     @Inject SetlistData mSetlistData;
     private File mFilePath;
@@ -50,6 +49,8 @@ public class EditFragment extends BaseFragment {
     @Nullable @Override public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_edit, container, false);
         ButterKnife.inject(this, view);
+        mEditText.setSingleLine(false);
+
         setHasOptionsMenu(true);
         return view;
     }
