@@ -32,6 +32,14 @@ public class Dialog {
                 .show();
     }
 
+    public static void showInfoDialog(Context activityContext, String message) {
+        new MaterialDialog.Builder(activityContext)
+                .content(message)
+                .positiveText("Ok")
+                .positiveColorRes(R.color.md_amber_700)
+                .show();
+    }
+
     public static void showInputDialog(Context activityContext, String title, String positiveAction,
                                        Action1<String> callback) {
         final View editTextLayout = ((Activity) activityContext).getLayoutInflater().inflate(R.layout.text_edit_dialog, null);

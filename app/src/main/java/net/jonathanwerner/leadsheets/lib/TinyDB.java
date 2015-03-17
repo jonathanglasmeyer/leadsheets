@@ -299,6 +299,10 @@ import javax.inject.Singleton;
         editor.apply();
     }
 
+    public boolean getBoolean(String key, boolean default_) {
+        return preferences.getBoolean(key, default_);
+    }
+
     public boolean getBoolean(String key) {
         return preferences.getBoolean(key, false);
     }

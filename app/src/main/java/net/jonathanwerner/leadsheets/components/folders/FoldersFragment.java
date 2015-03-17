@@ -13,6 +13,7 @@ import android.widget.ListView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import net.jonathanwerner.leadsheets.BuildConfig;
 import net.jonathanwerner.leadsheets.R;
 import net.jonathanwerner.leadsheets.base.BaseFragment;
 import net.jonathanwerner.leadsheets.base.Controller;
@@ -20,7 +21,9 @@ import net.jonathanwerner.leadsheets.components.main.MainActivity;
 import net.jonathanwerner.leadsheets.di.AppComponent;
 import net.jonathanwerner.leadsheets.events.FolderClick;
 import net.jonathanwerner.leadsheets.helpers.Dialog;
+import net.jonathanwerner.leadsheets.lib.TinyDB;
 import net.jonathanwerner.leadsheets.stores.FileStore;
+import net.jonathanwerner.leadsheets.stores.Sku;
 
 import javax.inject.Inject;
 
@@ -32,6 +35,7 @@ import timber.log.Timber;
 public class FoldersFragment extends BaseFragment {
     @InjectView(R.id.folders_list) ListView mFoldersListView;
     @Inject FileStore mFileStore;
+    @Inject TinyDB mTinyDB;
     private FoldersAdapter mAdapter;
     private FoldersController mController;
     private AppComponent mComponent;
@@ -75,21 +79,23 @@ public class FoldersFragment extends BaseFragment {
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_remove_ads:
-                MainActivity mainActivity = (MainActivity) getActivity();
-                // TODO
-                Dialog.showSnackbarInfo(getActivity(), "Yet to be implemented.");
-//                if (mainActivity.mIabReady) {
-//                    Dialog.showSnackbarInfo(getActivity(), "i'm ready");
+                if (BuildConfig.DEBUG) {
+                    Dialog.showSnackbarInfo(getActivity(), "Can't buy stuff in Debug Mode");
+                } else {
+                    MainActivity mainActivity = (MainActivity) getActivity();
+                    if (mainActivity.mIabReady) {
 
-//                    mainActivity.mIabHelper.launchPurchaseFlow(getActivity(), MainActivity.SKU_SUCCESS, 10001,
-//                            (result, info) -> {
-//                                if (result.isSuccess()) {
-//                                    Dialog.showSnackbarInfo(getActivity(), "buy sucess!");
-//                                } else {
-//                                    Dialog.showSnackbarInfo(getActivity(), "buy fail!");
-//                                }
-//                            }, "");
-//                }
+                        mainActivity.mIabHelper.launchPurchaseFlow(getActivity(), Sku.DISABLE_ADS, 10001,
+                                (result, purchase) -> {
+                                    if (result.isSuccess()) {
+//                                        mTinyDB.putBoolean(Preferences.DISABLE_ADS, true);
+                                        Dialog.showInfoDialog(getActivity(),
+                                                "Thanks for supporting the developer :). The app will now restart.");
+                                        mainActivity.restartActivity();
+                                    }
+                                });
+                    }
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
