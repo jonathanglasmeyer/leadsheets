@@ -2,6 +2,7 @@ package net.jonathanwerner.leadsheets.components.setlist;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.transition.Fade;
 
@@ -10,10 +11,10 @@ import com.google.common.base.Preconditions;
 import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.SnackbarManager;
 import com.nispok.snackbar.enums.SnackbarType;
-import com.nispok.snackbar.listeners.ActionClickListener;
 
 import net.jonathanwerner.leadsheets.R;
 import net.jonathanwerner.leadsheets.base.Controller;
+import net.jonathanwerner.leadsheets.components.EditActivity;
 import net.jonathanwerner.leadsheets.components.EditFragment;
 import net.jonathanwerner.leadsheets.di.helper.Bus;
 import net.jonathanwerner.leadsheets.events.AllSongsChanged;
@@ -24,12 +25,17 @@ import net.jonathanwerner.leadsheets.events.SetlistReset;
 import net.jonathanwerner.leadsheets.events.ShowUndoSnackbar;
 import net.jonathanwerner.leadsheets.events.SongChanged;
 import net.jonathanwerner.leadsheets.events.SongMoved;
+import net.jonathanwerner.leadsheets.events.SongNew;
 import net.jonathanwerner.leadsheets.events.SongRemoved;
 import net.jonathanwerner.leadsheets.events.SongRename;
 import net.jonathanwerner.leadsheets.events.ToggleAlphabeticMode;
 import net.jonathanwerner.leadsheets.events.ToggleLockMode;
 import net.jonathanwerner.leadsheets.helpers.Dialog;
+import net.jonathanwerner.leadsheets.helpers.Resources;
+import net.jonathanwerner.leadsheets.stores.FileStore;
 import net.jonathanwerner.leadsheets.stores.UIState;
+
+import java.io.File;
 
 import javax.inject.Inject;
 
@@ -43,6 +49,9 @@ public class SetlistController extends Controller {
     private final Context mActivityContext;
     @Inject SetlistData mSetlistData;
     @Inject SetlistAdapter mSetlistAdapter;
+    @Inject Resources mResources;
+    @Inject FileStore mFileStore;
+    @Inject Dialog mDialog;
 
     @DebugLog
     public SetlistController(SetlistFragment fragment, Context activityContext) {
@@ -64,6 +73,7 @@ public class SetlistController extends Controller {
                 if (!UIState.lock) {
                     mSetlistAdapter.onMoveItem(position, mSetlistData.getNewSetlistItemPos()); // notify adapter that list has changed
                 }
+                mSetlistAdapter.showTooltips(); // we add items to setlist -> potentially show hints for setlist items
                 break;
 
             case SetlistData.ITEM_TYPE_SETLIST:
@@ -84,7 +94,7 @@ public class SetlistController extends Controller {
     }
 
     @Bus public void onEvent(final SongRename event) {
-        Dialog.showInputDialog(mActivityContext, "Rename Song", "Rename", s ->
+        mDialog.showInputDialog(mActivityContext, "Rename Song", "Rename", s ->
                 mSetlistData.renameItem(event.position, s));
     }
 
@@ -130,17 +140,41 @@ public class SetlistController extends Controller {
         mSetlistAdapter.setReorderMode(event.reorderMode);
     }
 
+    @Bus public void onEvent(SongNew event) {
+        mDialog.showInputDialog(mActivityContext,
+                mResources.getString(R.string.dialog_new_song),
+                mResources.getString(R.string.dialog_ok),
+                s -> {
+                    File filePath = mSetlistData.newSong(s);
+                    final Intent intent = new Intent(mActivityContext, EditActivity.class);
+                    intent.putExtra(EditActivity.FILEPATH, filePath.toString());
+                    mActivityContext.startActivity(intent);
+
+                });
+
+        //        new AlertDialog.Builder(this)
+//                .setTitle(currentScreen.equals(UIState.SETLIST) ? "New Song" : "New Project")
+//                .setView(editTextLayout)
+//                .setPositiveButton("Ok", (dialog, whichButton) -> {
+//                    String text = editText.getText().toString();
+//                    switch (currentScreen) {
+//                        case UIState.SETLIST:
+
+//                            break;
+//                        case UIState.FOLDERS:
+//                            mFileStore.newFolder(text);
+//                            break;
+//                    }
+//                }).setNegativeButton("Cancel", (dialog, whichButton) -> {
+//        }).show();
+    }
+
     private void showUndoSnackbar() {
         SnackbarManager.show(
                 Snackbar.with(mActivityContext.getApplicationContext())
                         .text(R.string.snack_bar_text_item_removed)
                         .actionLabel(R.string.snack_bar_action_undo)
-                        .actionListener(new ActionClickListener() {
-                            @Override
-                            public void onActionClicked(Snackbar snackbar) {
-                                onItemUndoActionClicked();
-                            }
-                        })
+                        .actionListener(snackbar -> onItemUndoActionClicked())
                         .actionColorResource(R.color.snackbar_action_color_done)
                         .duration(5000)
                         .type(SnackbarType.SINGLE_LINE)
@@ -157,7 +191,9 @@ public class SetlistController extends Controller {
 
     @Bus public void onEvent(final SetlistReset event) {
         Timber.d("onEvent: reset");
-        Dialog.showQuestionDialog(mActivityContext, "Reset Setlist?", "Reset", new MaterialDialog.ButtonCallback() {
+        mDialog.showQuestionDialog(mActivityContext,
+                mResources.getString(R.string.dialog_reset_setlist),
+                mResources.getString(R.string.dialog_reset), new MaterialDialog.ButtonCallback() {
             @Override
             public void onPositive(final MaterialDialog dialog) {
                 mSetlistData.resetSetlist();

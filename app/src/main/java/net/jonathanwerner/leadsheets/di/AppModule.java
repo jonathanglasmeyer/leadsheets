@@ -10,8 +10,10 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import net.jonathanwerner.leadsheets.di.helper.ForApplication;
+import net.jonathanwerner.leadsheets.helpers.Dialog;
 import net.jonathanwerner.leadsheets.helpers.Resources;
 import net.jonathanwerner.leadsheets.lib.TinyDB;
+import net.jonathanwerner.leadsheets.stores.Hints;
 
 import javax.inject.Singleton;
 
@@ -43,8 +45,15 @@ public class AppModule {
     }
 
     @Provides @Singleton TinyDB provideTinyDB(Application app) {
-
         return new TinyDB(app);
+    }
+
+    @Provides @Singleton Dialog provideDialog(Resources resources) {
+        return new Dialog(resources);
+    }
+
+    @Provides @Singleton Hints provideHints(TinyDB tinyDB) {
+        return new Hints(tinyDB);
     }
 
     @Provides @Singleton SharedPreferences providePreferenceManager() {

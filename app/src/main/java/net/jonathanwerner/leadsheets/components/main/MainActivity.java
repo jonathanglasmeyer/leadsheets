@@ -1,8 +1,6 @@
 package net.jonathanwerner.leadsheets.components.main;
 
-import android.app.AlertDialog;
 import android.app.FragmentManager;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
@@ -11,7 +9,6 @@ import android.transition.Fade;
 import android.transition.Slide;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -22,11 +19,12 @@ import net.jonathanwerner.leadsheets.BuildConfig;
 import net.jonathanwerner.leadsheets.R;
 import net.jonathanwerner.leadsheets.base.BaseActivity;
 import net.jonathanwerner.leadsheets.base.Controller;
-import net.jonathanwerner.leadsheets.components.EditActivity;
 import net.jonathanwerner.leadsheets.components.folders.FoldersFragment;
 import net.jonathanwerner.leadsheets.components.setlist.SetlistData;
 import net.jonathanwerner.leadsheets.di.AppComponent;
 import net.jonathanwerner.leadsheets.events.ChangeToolbarTitle;
+import net.jonathanwerner.leadsheets.events.FolderNew;
+import net.jonathanwerner.leadsheets.events.SongNew;
 import net.jonathanwerner.leadsheets.events.ToggleToolbar;
 import net.jonathanwerner.leadsheets.helpers.Resources;
 import net.jonathanwerner.leadsheets.helpers.Strings;
@@ -34,11 +32,10 @@ import net.jonathanwerner.leadsheets.lib.TinyDB;
 import net.jonathanwerner.leadsheets.lib.billing_util.IabHelper;
 import net.jonathanwerner.leadsheets.stores.Constants;
 import net.jonathanwerner.leadsheets.stores.FileStore;
+import net.jonathanwerner.leadsheets.stores.Hints;
 import net.jonathanwerner.leadsheets.stores.Preferences;
 import net.jonathanwerner.leadsheets.stores.Sku;
 import net.jonathanwerner.leadsheets.stores.UIState;
-
-import java.io.File;
 
 import javax.inject.Inject;
 
@@ -61,6 +58,7 @@ public class MainActivity extends BaseActivity {
     @Inject FileStore mFileStore;
     @Inject TinyDB mTinyDB;
     @Inject Resources mResources;
+    @Inject Hints mHints;
     private MainController mMainController;
     private FragmentManager mFragmentManager;
     private ToolbarController mToolbarController;
@@ -68,6 +66,7 @@ public class MainActivity extends BaseActivity {
 
     private void initView() {
         mDisableAds = mTinyDB.getBoolean(Preferences.DISABLE_ADS, false);
+        if (BuildConfig.DEBUG) mDisableAds = true;
         setContentView(mDisableAds ? R.layout.activity_main : R.layout.activity_main_with_ads);
         ButterKnife.inject(this);
     }
@@ -76,9 +75,10 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (BuildConfig.DEBUG) mDisableAds = true;
-
         initView();
+
+        // for debugging
+//        mHints.reset();
 
         mToolbarController = new ToolbarController(this);
         mToolbarController.register();
@@ -143,8 +143,8 @@ public class MainActivity extends BaseActivity {
     private void initAds() {
         if (!mDisableAds) {
             AdRequest ad = new AdRequest.Builder()
-                    .addTestDevice(Constants.NEXUS5) // my nexus 5
-                    .addTestDevice(Constants.GENYMOTION_NEXUS5) // genymotion nexus 5
+                    .addTestDevice(Constants.NEXUS5)
+                    .addTestDevice(Constants.GENYMOTION_NEXUS5)
                     .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                     .build();
             mAd.loadAd(ad);
@@ -152,31 +152,8 @@ public class MainActivity extends BaseActivity {
     }
 
     private void handleFabClicked(final View view) {
-        final View editTextLayout = getLayoutInflater().inflate(R.layout.text_edit_dialog, null);
-        final EditText editText = (EditText) editTextLayout.findViewById(R.id.edit_text_dialog);
-
-        final String currentScreen = getCurrentScreen();
-
-        new AlertDialog.Builder(this)
-                .setTitle(currentScreen.equals(UIState.SETLIST) ? "New Song" : "New Project")
-                .setView(editTextLayout)
-                .setPositiveButton("Ok", (dialog, whichButton) -> {
-                    String text = editText.getText().toString();
-                    switch (currentScreen) {
-                        case UIState.SETLIST:
-                            final File filePath = new File(new File(mFileStore.getRootPath(), mSetlistData.getCurrentDir()), text + ".txt");
-                            mFileStore.newFile(filePath);
-                            final Intent intent = new Intent(this, EditActivity.class);
-                            intent.putExtra(EditActivity.FILEPATH, filePath.toString());
-                            startActivity(intent);
-                            break;
-                        case UIState.FOLDERS:
-                            mFileStore.newFolder(text);
-                            break;
-                    }
-                }).setNegativeButton("Cancel", (dialog, whichButton) -> {
-        }).show();
-
+        EventBus.getDefault().post(getCurrentScreen().equals(UIState.SETLIST) ?
+                new SongNew() : new FolderNew());
     }
 
     @Override

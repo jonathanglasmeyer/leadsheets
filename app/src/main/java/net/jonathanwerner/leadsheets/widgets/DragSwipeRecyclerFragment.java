@@ -22,6 +22,12 @@ import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils;
 
 import net.jonathanwerner.leadsheets.R;
 import net.jonathanwerner.leadsheets.base.BaseFragment;
+import net.jonathanwerner.leadsheets.di.helper.Bus;
+import net.jonathanwerner.leadsheets.events.HintAddRestItem;
+import net.jonathanwerner.leadsheets.events.HintShowDragSetlistItem;
+import net.jonathanwerner.leadsheets.events.HintShowSwipeSetlistItem;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by jwerner on 2/17/15.
@@ -38,6 +44,11 @@ public abstract class DragSwipeRecyclerFragment extends BaseFragment {
     public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_recycler_list_view, container, false);
 
+    }
+
+    @Override public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -86,7 +97,10 @@ public abstract class DragSwipeRecyclerFragment extends BaseFragment {
         mRecyclerViewTouchActionGuardManager.attachRecyclerView(mRecyclerView);
         mRecyclerViewSwipeManager.attachRecyclerView(mRecyclerView);
         mRecyclerViewDragDropManager.attachRecyclerView(mRecyclerView);
+
+
     }
+
 
     @Override
     public void onPause() {
@@ -138,5 +152,30 @@ public abstract class DragSwipeRecyclerFragment extends BaseFragment {
         mRecyclerView.scrollToPosition(position);
     }
 
+    @Bus public void onEvent(HintShowSwipeSetlistItem event) {
+        showTooltip(getViewForPosition(1), event.message);
+    }
 
+    @Bus public void onEvent(HintShowDragSetlistItem event) {
+        showTooltip(getViewForPosition(2), event.message);
+    }
+
+    @Bus public void onEvent(HintAddRestItem event) {
+        showTooltip(getViewForPosition(2), event.message);
+    }
+
+    private View getViewForPosition(int position) {
+        return ((DragSwipeRecyclerAdapter.MyViewHolder)
+                mRecyclerView.findViewHolderForPosition(position)).mContainer;
+    }
+
+    private void showTooltip(final View anchor, String message) {
+        new Tooltip(getActivity()).showToolTip(anchor, message);
+    }
+
+
+    @Override public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 }

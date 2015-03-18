@@ -81,7 +81,7 @@ public class FileStore {
         return filenames;
     }
 
-    public void removeFolder(String folderName) {
+    public boolean removeFolder(String folderName) {
         final File folder = new File(mRootPath, folderName);
 
         final File archiveDir = new File(mRootPath, ".archive");
@@ -89,6 +89,7 @@ public class FileStore {
         final boolean worked = folder.renameTo(new File(archiveDir, folderName));
         if (!worked) Timber.d("removeFolder: didn't work..");
         emitFolderChange();
+        return worked;
     }
 
     public void removeFile(File filePath) {

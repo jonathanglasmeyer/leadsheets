@@ -17,6 +17,7 @@
 <resources>
     <color name="background">#fff0f0f0</color>
     <color name="background_list_item">#fff</color>
+    <color name="tooltip">@color/md_amber_500</color>
 
     <color name="bg_item_normal_state">@color/background_list_item</color>
     <color name="bg_item_normal_pressed_state">@color/background_list_item</color>

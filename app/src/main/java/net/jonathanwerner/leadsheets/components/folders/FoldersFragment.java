@@ -17,12 +17,15 @@ import net.jonathanwerner.leadsheets.BuildConfig;
 import net.jonathanwerner.leadsheets.R;
 import net.jonathanwerner.leadsheets.base.BaseFragment;
 import net.jonathanwerner.leadsheets.base.Controller;
+import net.jonathanwerner.leadsheets.base.HasComponent;
 import net.jonathanwerner.leadsheets.components.main.MainActivity;
 import net.jonathanwerner.leadsheets.di.AppComponent;
 import net.jonathanwerner.leadsheets.events.FolderClick;
 import net.jonathanwerner.leadsheets.helpers.Dialog;
+import net.jonathanwerner.leadsheets.helpers.Resources;
 import net.jonathanwerner.leadsheets.lib.TinyDB;
 import net.jonathanwerner.leadsheets.stores.FileStore;
+import net.jonathanwerner.leadsheets.stores.Hints;
 import net.jonathanwerner.leadsheets.stores.Sku;
 
 import javax.inject.Inject;
@@ -32,10 +35,13 @@ import butterknife.InjectView;
 import de.greenrobot.event.EventBus;
 import timber.log.Timber;
 
-public class FoldersFragment extends BaseFragment {
+public class FoldersFragment extends BaseFragment implements HasComponent<AppComponent> {
     @InjectView(R.id.folders_list) ListView mFoldersListView;
     @Inject FileStore mFileStore;
     @Inject TinyDB mTinyDB;
+    @Inject Dialog mDialog;
+    @Inject Resources mResources;
+    @Inject Hints mHints;
     private FoldersAdapter mAdapter;
     private FoldersController mController;
     private AppComponent mComponent;
@@ -88,15 +94,27 @@ public class FoldersFragment extends BaseFragment {
                         mainActivity.mIabHelper.launchPurchaseFlow(getActivity(), Sku.DISABLE_ADS, 10001,
                                 (result, purchase) -> {
                                     if (result.isSuccess()) {
-//                                        mTinyDB.putBoolean(Preferences.DISABLE_ADS, true);
-                                        Dialog.showInfoDialog(getActivity(),
-                                                "Thanks for supporting the developer :). The app will now restart.");
+                                        mDialog.showInfoDialog(getActivity(),
+                                                mResources.getString(R.string.dialog_thanks));
                                         mainActivity.restartActivity();
                                     }
                                 });
                     }
                 }
                 return true;
+            case R.id.action_settings:
+                Dialog.showSnackbarInfo(getActivity(), "Not implemented yet");
+                return true;
+            case R.id.action_help:
+                Dialog.showSnackbarInfo(getActivity(), "Not implemented yet");
+                return true;
+            case R.id.action_about:
+                Dialog.showSnackbarInfo(getActivity(), "Not implemented yet");
+                return true;
+            case R.id.action_show_hints:
+                mHints.reset();
+                Dialog.showSnackbarInfo(getActivity(), "Showing help hints again");
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -139,12 +157,21 @@ public class FoldersFragment extends BaseFragment {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.action_remove:
-                Dialog.showQuestionDialog(getActivity(), "Do you really want to remove this project?", "Remove", new MaterialDialog.ButtonCallback() {
+                mDialog.showQuestionDialog(getActivity(),
+                        mResources.getString(R.string.dialog_remove_project),
+                        mResources.getString(R.string.dialog_remove), new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(final MaterialDialog dialog) {
-                        mFileStore.removeFolder(mAdapter.getItem(info.position));
+                        final boolean worked = mFileStore.removeFolder(mAdapter.getItem(info.position));
+                        if (!worked) {
+                            Dialog.showSnackbarInfo(getActivity(), mResources.getString(R.string.dialog_delete_error));
+                        }
                     }
                 });
+                return true;
+            case R.id.action_rename:
+                Dialog.showSnackbarInfo(getActivity(), "Not implemented yet.");
+
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -154,6 +181,10 @@ public class FoldersFragment extends BaseFragment {
     @Override protected void onCreateComponent(AppComponent appComponent) {
         mComponent = appComponent;
         mComponent.inject(this);
+    }
+
+    @Override public AppComponent getComponent() {
+        return mComponent;
     }
 
 }

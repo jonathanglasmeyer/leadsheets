@@ -331,5 +331,6 @@ public abstract class DragSwipeRecyclerAdapter
             return mContainer;
         }
     }
+
 }
 

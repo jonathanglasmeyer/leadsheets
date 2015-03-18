@@ -37,6 +37,7 @@ public class EditFragment extends BaseFragment {
     @InjectView(R.id.edit_text) EditText mEditText;
     @Inject FileStore mFileStore;
     @Inject SetlistData mSetlistData;
+    @Inject Dialog mDialog;
     private File mFilePath;
     private boolean mDeleteMode;
 
@@ -83,7 +84,7 @@ public class EditFragment extends BaseFragment {
     @Override public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_remove:
-                Dialog.showQuestionDialog(getActivity(), "Do you want to remove this song?", "Remove", new MaterialDialog.ButtonCallback() {
+                mDialog.showQuestionDialog(getActivity(), "Do you want to remove this song?", "Remove", new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(final MaterialDialog dialog) {
                         final File file = new File(getArguments().getString(FILEPATH));

@@ -3,31 +3,33 @@ package net.jonathanwerner.leadsheets.helpers;
 import android.content.Context;
 import android.util.TypedValue;
 
+import javax.inject.Singleton;
+
 /**
  * Created by jwerner on 3/7/15.
  */
-public class Resources {
-    private final Context mContext;
+@Singleton public class Resources {
+    private final Context mAppContext;
 
-    public Resources(Context context) {
-        mContext = context;
+    public Resources(Context appContext) {
+        mAppContext = appContext;
     }
 
     public int dipToPixel(int dip) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dip, mContext.getResources().getDisplayMetrics());
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dip, mAppContext.getResources().getDisplayMetrics());
     }
 
     public int spToPixel(int sp) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, mContext.getResources().getDisplayMetrics());
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, mAppContext.getResources().getDisplayMetrics());
     }
 
     public int getColor(int id) {
-        return mContext.getResources().getColor(id);
+        return mAppContext.getResources().getColor(id);
     }
 
 
     public String getString(int id) {
-        return mContext.getString(id);
+        return mAppContext.getString(id);
     }
 
 

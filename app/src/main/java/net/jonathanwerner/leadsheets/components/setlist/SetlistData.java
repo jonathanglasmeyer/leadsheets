@@ -274,6 +274,14 @@ import timber.log.Timber;
         emitAllSongsChanged();
     }
 
+    public File newSong(String title) {
+        final File filePath = new File(new File(mFileStore.getRootPath(),
+                getCurrentDir()), title + ".txt");
+        mFileStore.newFile(filePath);
+        return filePath;
+
+    }
+
     public static final class ConcreteData extends Data {
         public static final int REACTION_SETLIST_ITEM = RecyclerViewSwipeManager.REACTION_CAN_SWIPE_RIGHT;
         public static final int REACTION_REST_ITEM = RecyclerViewSwipeManager.REACTION_CAN_SWIPE_RIGHT;

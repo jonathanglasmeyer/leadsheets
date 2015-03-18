@@ -44,6 +44,10 @@ public class SetlistFragment extends DragSwipeRecyclerFragment implements HasCom
                 FluentBundle.newFluentBundle().put(FOLDER_NAME, folderName));
     }
 
+    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
+
     @Override public void setController() {
         if (mSetlistController == null)
             mSetlistController = new SetlistController(this, getActivity());
@@ -58,11 +62,18 @@ public class SetlistFragment extends DragSwipeRecyclerFragment implements HasCom
     public void onResume() {
         refresh();
         getActivity().invalidateOptionsMenu();
+
+//        if (mSetlistAdapter.getItemCount() > 3) {
+//            new Handler().postDelayed(() -> {
+//               EventBus.getDefault().post(new HintShowSwipeSetlistItem());
+//            }, 200);
+//        }
+
         super.onResume();
     }
 
     @Override public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
-        refresh();
+//        refresh();
         setHasOptionsMenu(true);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
@@ -70,6 +81,8 @@ public class SetlistFragment extends DragSwipeRecyclerFragment implements HasCom
     public void refresh() {
         mSetlistData.changeCurrentDirAndRefreshData(getArguments().getString(FOLDER_NAME));
         mSetlistAdapter.notifyDataSetChanged();
+        mSetlistAdapter.showTooltips();
+
     }
 
     @Override public void onPause() {
@@ -84,31 +97,20 @@ public class SetlistFragment extends DragSwipeRecyclerFragment implements HasCom
 
     void switchMode() {
         UIState.alphabetMode = !UIState.alphabetMode;
-        if (UIState.alphabetMode) {
-            mSetlistData.setAlphabeticalMode(true);
-        } else {
-            mSetlistData.setAlphabeticalMode(false);
-        }
+        mSetlistData.setAlphabeticalMode(UIState.alphabetMode);
         refresh();
-//        getActivity().invalidateOptionsMenu();
     }
 
     void setAlphabeticToggleIcon(MenuItem item) {
-        if (UIState.alphabetMode) {
-            item.setIcon(R.drawable.ic_format_list_numbered_white_24dp);
-//            menuItemLock.setVisible(false);
-        } else {
-            item.setIcon(R.drawable.ic_my_library_books_white_24dp);
-//            menuItemLock.setVisible(true);
-        }
+        item.setIcon(UIState.alphabetMode ?
+                R.drawable.ic_format_list_numbered_white_24dp :
+                R.drawable.ic_my_library_books_white_24dp);
     }
 
     void setLockToggleIcon(MenuItem item) {
-        if (UIState.lock) {
-            item.setIcon(R.drawable.ic_lock_open_white_24dp);
-        } else {
-            item.setIcon(R.drawable.ic_lock_outline_white_24dp);
-        }
+        item.setIcon(UIState.lock ?
+                R.drawable.ic_lock_open_white_24dp :
+                R.drawable.ic_lock_outline_white_24dp);
     }
 
     @Override public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
