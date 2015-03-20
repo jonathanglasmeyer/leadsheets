@@ -91,5 +91,6 @@
     <string name="action_send_mail">Send mail…</string>
     <string name="dialog_couldnt_rename">Something didn\'t work - couldn\'t rename.</string>
     <string name="dialog_rename_folder_question">Rename Project</string>
+    <string name="dialog_rename_song">Rename Song</string>
 
 </resources>

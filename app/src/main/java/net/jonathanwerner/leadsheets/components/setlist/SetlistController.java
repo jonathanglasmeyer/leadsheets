@@ -95,8 +95,11 @@ public class SetlistController extends Controller {
     }
 
     @Bus public void onEvent(final SongRename event) {
-        mDialog.showInputDialog(mActivityContext, "Rename Song", "Rename", s ->
-                mSetlistData.renameItem(event.position, s));
+        final SetlistData.ConcreteData item = (SetlistData.ConcreteData) mSetlistData.getItem(event.position);
+        String itemName = item.getText();
+        mDialog.showRenameDialog(mActivityContext,
+                mResources.getString(R.string.dialog_rename_song),
+                mResources.getString(R.string.action_rename), itemName, s -> mSetlistData.renameItem(event.position, s));
     }
 
     @Bus public void onEvent(final ToggleLockMode event) {
