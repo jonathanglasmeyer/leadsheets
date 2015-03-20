@@ -76,6 +76,7 @@ public class Tooltip {
         tipWindow.showAtLocation(anchor, Gravity.NO_GRAVITY, position_x,
                 position_y);
 
+        tooltipLayout.setOnClickListener(v -> tipWindow.dismiss());
         new Handler().postDelayed(tipWindow::dismiss, 6000);
 
     }

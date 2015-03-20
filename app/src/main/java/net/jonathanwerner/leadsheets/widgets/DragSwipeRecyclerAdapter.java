@@ -108,19 +108,18 @@ public abstract class DragSwipeRecyclerAdapter
                 holder.mLockHint.setVisibility(View.GONE);
             }
 
+            if (hideDeleteButton()) {
+                holder.mDeleteButtonWrap.setVisibility(View.GONE);
+            } else {
+                holder.mDeleteButtonWrap.setVisibility(View.VISIBLE);
+            }
+
         } else if (holder.mDeleteButtonWrap != null) {
             holder.mDeleteButtonWrap.setVisibility(View.GONE);
             holder.mDeleteButton.setOnClickListener(null);
             holder.mLockHint.setVisibility(View.GONE);
         }
 
-//        if (itemCanBeDragged(item)) {
-//            holder.mDragHandle.setVisibility(View.VISIBLE);
-//        } else {
-//            if (holder.mDragHandle != null) {
-//                holder.mDragHandle.setVisibility(View.GONE);
-//            }
-//        }
         if (holder.mImage != null && itemHasNumber(item)) {
             holder.mImageWrap.setVisibility(View.VISIBLE);
             TextDrawable drawable = TextDrawable.builder()
@@ -167,6 +166,8 @@ public abstract class DragSwipeRecyclerAdapter
                 item.isPinnedToSwipeLeft() ? RecyclerViewSwipeManager.OUTSIDE_OF_THE_WINDOW_LEFT : 0);
 
     }
+
+    protected abstract boolean hideDeleteButton();
 
     protected abstract void handleReset();
 

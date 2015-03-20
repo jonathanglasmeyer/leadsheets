@@ -12,5 +12,18 @@
         android:dividerHeight="1px"
         android:drawSelectorOnTop="true" />
 
+    <TextView
+        android:id="@+id/empty_folders_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center_horizontal|center_vertical"
+        android:textColor="@color/md_text_54_secondaryOrIcon"
+        android:textSize="16sp"
+        android:padding="24dp"
+        android:singleLine="false"
+        android:text="@string/empty_folders_view"
+
+        />
+
 
 </FrameLayout>

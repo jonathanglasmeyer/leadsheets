@@ -20,13 +20,13 @@ android {
         applicationId "net.jonathanwerner.leadsheets"
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode 3
-        versionName "1.0.2"
+        versionCode 4
+        versionName "1.0.3"
     }
     buildTypes {
         release {
-            minifyEnabled false
-//            shrinkResources true
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
@@ -47,31 +47,16 @@ apt {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.google.android.gms:play-services:6.5.87'
-
-
-    compile 'com.android.support:appcompat-v7:22.0.0'
 
     // dagger2
-    compile 'com.google.dagger:dagger:2.0-SNAPSHOT'
     apt 'com.google.dagger:dagger-compiler:2.0-SNAPSHOT'
     provided 'org.glassfish:javax.annotation:10.0-b28'
     // adds the @Generated annotation that Android lacks
 
     // workflow
-    compile 'com.jakewharton.timber:timber:2.7.1'
     compile group: 'com.google.guava', name: 'guava', version: '18.0'
-    compile 'com.jakewharton:butterknife:6.1.0'
-    compile 'de.greenrobot:eventbus:2.4.0'
-    compile 'io.reactivex:rxjava:1.0.0'
-
 
     // ui
-    compile 'com.afollestad:material-dialogs:0.6.3.1'
-    compile 'com.melnykov:floatingactionbutton:1.2.0'
-    compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
-    compile 'com.nispok:snackbar:2.8.0'
-    compile 'com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:0.6.2'
 
     // else
     provided 'javax.annotation:jsr250-api:1.0'
@@ -79,6 +64,17 @@ dependencies {
 
     // testing
     // Espresso 2 Dependencies
-    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.0'
-    androidTestCompile 'com.android.support.test:testing-support-lib:0.1'
+    compile 'com.google.android.gms:play-services:6.5.87'
+    compile 'com.android.support:appcompat-v7:22.0.0'
+    compile 'com.google.dagger:dagger:2.0-SNAPSHOT'
+    compile 'com.jakewharton.timber:timber:2.7.1'
+    compile 'com.jakewharton:butterknife:6.1.0'
+    compile 'de.greenrobot:eventbus:2.4.0'
+    compile 'io.reactivex:rxjava:1.0.0'
+    compile 'com.afollestad:material-dialogs:0.6.3.1'
+    compile 'com.melnykov:floatingactionbutton:1.2.0'
+    compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
+    compile 'com.nispok:snackbar:2.8.0'
+    compile 'com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:0.6.2'
+    compile 'com.android.support:support-v4:22.0.0'
 }

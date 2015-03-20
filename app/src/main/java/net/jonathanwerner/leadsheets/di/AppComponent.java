@@ -2,6 +2,7 @@ package net.jonathanwerner.leadsheets.di;
 
 import net.jonathanwerner.leadsheets.components.EditActivity;
 import net.jonathanwerner.leadsheets.components.EditFragment;
+import net.jonathanwerner.leadsheets.components.SettingsActivity;
 import net.jonathanwerner.leadsheets.components.detailedsetlist.DetailedSetlistFragment;
 import net.jonathanwerner.leadsheets.components.folders.FoldersController;
 import net.jonathanwerner.leadsheets.components.folders.FoldersFragment;
@@ -36,6 +37,8 @@ public interface AppComponent {
     void inject(SetlistController setlistController);
 
     void inject(FoldersController foldersController);
+
+    void inject(SettingsActivity settingsActivity);
 
     /**
      * An initializer that creates the graph from an application.

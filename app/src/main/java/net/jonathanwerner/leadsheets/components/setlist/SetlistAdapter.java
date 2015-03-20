@@ -20,7 +20,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import de.greenrobot.event.EventBus;
-import timber.log.Timber;
 
 /**
  * Created by jwerner on 2/9/15.
@@ -36,29 +35,19 @@ import timber.log.Timber;
     }
 
     public void showTooltips() {
-        Timber.d("showTooltips: ");
-        Timber.d("getitemcount: " + getItemCount());
-        Timber.d("setlist size: " + mSetlistData.getSetlistFromData().size());
-        Timber.d("should show add_rest_item: " + mHints.shouldShow(Hints.ADD_REST_ITEM));
-        Timber.d("should show swipe: " + mHints.shouldShow(Hints.SWIPE_SETLIST_ITEM));
-        Timber.d("should show drag: " + mHints.shouldShow(Hints.DRAG_SETLIST_ITEM));
-
-        if (mHints.shouldShow(Hints.ADD_REST_ITEM) && getItemCount() > 2) {
-            Timber.d("showTooltips: should show ADDRESTITEM");
+        if (mHints.shouldShow(Hints.ADD_REST_ITEM) && getItemCount() > 2 &&
+                mSetlistData.getSetlistFromData().size() == 0) {
             mHints.setDone(Hints.ADD_REST_ITEM);
             postHint(new HintAddRestItem(mResources.getString(R.string.hint_add_rest_item)));
-        }
-
-        if (mHints.shouldShow(Hints.SWIPE_SETLIST_ITEM) && mSetlistData.getSetlistFromData().size() == 1) {
-            Timber.d("showTooltips: should show swipeSetlistItem");
+        } else if (mHints.shouldShow(Hints.SWIPE_SETLIST_ITEM) && mSetlistData.getSetlistFromData().size() == 1) {
             mHints.setDone(Hints.SWIPE_SETLIST_ITEM);
             postHint(new HintShowSwipeSetlistItem(mResources.getString(R.string.hint_swipe_setlist_item)));
-        }
-
-        if (mHints.shouldShow(Hints.DRAG_SETLIST_ITEM) && mSetlistData.getSetlistFromData().size() == 2) {
-            Timber.d("showTooltips: should show dragsetlistitem");
+        } else if (mHints.shouldShow(Hints.DRAG_SETLIST_ITEM) && mSetlistData.getSetlistFromData().size() == 2) {
             mHints.setDone(Hints.DRAG_SETLIST_ITEM);
             postHint(new HintShowDragSetlistItem(mResources.getString(R.string.hint_drag_setlist_item)));
+        } else if (mHints.shouldShow(Hints.OPEN_PERFORMANCE_VIEW) && mSetlistData.getSetlistFromData().size() == 3) {
+            mHints.setDone(Hints.OPEN_PERFORMANCE_VIEW);
+            postHint(new HintShowDragSetlistItem(mResources.getString(R.string.hint_open_perf_view)));
         }
     }
 
@@ -74,11 +63,9 @@ import timber.log.Timber;
         notifyDataSetChanged();
     }
 
-
-//    @Override protected void handleLongClick(final int position, final View v) {
-//        EventBus.getDefault().post(new SongLongClick(position, v));
-//
-//    }
+    @Override protected boolean hideDeleteButton() {
+        return mSetlistData.getSetlistFromData().size() == 0;
+    }
 
     @Override
     protected void handleReset() {
@@ -99,10 +86,6 @@ import timber.log.Timber;
         return ((SetlistData.ConcreteData) item).getItemType() == SetlistData.ITEM_TYPE_SETLIST;
 
     }
-
-//    @Override protected void handleRemove(final int position) {
-//        EventBus.getDefault().post(new SetlistRemove(position));
-//    }
 
     @Override protected boolean canStartDrag() {
         return mSetlistData.mSortable;

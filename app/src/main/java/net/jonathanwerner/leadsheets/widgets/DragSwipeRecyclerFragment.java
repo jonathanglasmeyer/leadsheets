@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.common.base.Preconditions;
 import com.h6ah4i.android.widget.advrecyclerview.animator.RefactoredDefaultItemAnimator;
@@ -27,12 +28,15 @@ import net.jonathanwerner.leadsheets.events.HintAddRestItem;
 import net.jonathanwerner.leadsheets.events.HintShowDragSetlistItem;
 import net.jonathanwerner.leadsheets.events.HintShowSwipeSetlistItem;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import de.greenrobot.event.EventBus;
 
 /**
  * Created by jwerner on 2/17/15.
  */
 public abstract class DragSwipeRecyclerFragment extends BaseFragment {
+    @InjectView(R.id.empty_setlist_textview) TextView mTextViewEmpty;
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mLayoutManager;
     private RecyclerView.Adapter mWrappedAdapter;
@@ -42,7 +46,9 @@ public abstract class DragSwipeRecyclerFragment extends BaseFragment {
 
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_recycler_list_view, container, false);
+        View view = inflater.inflate(R.layout.fragment_recycler_list_view, container, false);
+        ButterKnife.inject(this, view);
+        return view;
 
     }
 
@@ -99,6 +105,12 @@ public abstract class DragSwipeRecyclerFragment extends BaseFragment {
         mRecyclerViewDragDropManager.attachRecyclerView(mRecyclerView);
 
 
+    }
+
+    public void showEmptyText() {
+        boolean b = getAdapter().getItemCount() == 2;
+        mRecyclerView.setVisibility(b ? View.GONE : View.VISIBLE);
+        mTextViewEmpty.setVisibility(b ? View.VISIBLE : View.GONE);
     }
 
 

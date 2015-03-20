@@ -3,7 +3,6 @@ package net.jonathanwerner.leadsheets.helpers;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.text.Editable;
 import android.view.View;
 import android.view.WindowManager;
@@ -85,13 +84,30 @@ import rx.functions.Action1;
         AlertDialog dialog = new AlertDialog.Builder(activityContext)
                 .setView(editTextLayout)
                 .setTitle(title)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override public void onClick(final DialogInterface dialog, final int which) {
-                        Editable text = editText.getText();
-                        if (text.length() > 0) callback.call(String.valueOf(text));
-                    }
+                .setPositiveButton("OK", (dialog1, which) -> {
+                    Editable text = editText.getText();
+                    if (text.length() > 0) callback.call(String.valueOf(text));
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(mResources.getString(R.string.dialog_cancel), null)
+                .create();
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        dialog.show();
+    }
+
+    public void showRenameDialog(Context activityContext, String title, String positiveAction, String preset,
+                                 Action1<String> callback) {
+        final View editTextLayout = ((Activity) activityContext).getLayoutInflater().inflate(R.layout.text_edit_dialog, null);
+        EditText editText = (EditText) editTextLayout.findViewById(R.id.edit_text_dialog);
+        editText.setText(preset);
+
+        AlertDialog dialog = new AlertDialog.Builder(activityContext)
+                .setView(editTextLayout)
+                .setTitle(title)
+                .setPositiveButton(positiveAction, (dialog1, which) -> {
+                    Editable text = editText.getText();
+                    if (text.length() > 0) callback.call(String.valueOf(text));
+                })
+                .setNegativeButton(mResources.getString(R.string.dialog_cancel), null)
                 .create();
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         dialog.show();

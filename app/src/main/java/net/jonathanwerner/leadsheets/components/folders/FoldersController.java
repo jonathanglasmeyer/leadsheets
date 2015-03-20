@@ -36,7 +36,7 @@ public class FoldersController extends Controller {
 
     @Bus public void onEvent(FolderNew event) {
         mDialog.showInputDialog(mActivityContext,
-                mResources.getString(R.string.dialog_new_song), mResources.getString(R.string.dialog_ok),
+                mResources.getString(R.string.dialog_new_folder), mResources.getString(R.string.dialog_ok),
                 mFileStore::newFolder);
     }
 

@@ -1,8 +1,10 @@
 package net.jonathanwerner.leadsheets.components.main;
 
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.Toolbar;
 import android.transition.Fade;
@@ -43,11 +45,13 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.Optional;
 import de.greenrobot.event.EventBus;
+import timber.log.Timber;
 
 
 public class MainActivity extends BaseActivity {
     public IabHelper mIabHelper;
     public boolean mIabReady = false;
+    public boolean mDisableAds;
     @InjectView(R.id.toolbar) protected Toolbar mToolbar;
     @InjectView(R.id.header) View mHeader;
     @InjectView(R.id.content_frame) View mContentFrame;
@@ -62,11 +66,11 @@ public class MainActivity extends BaseActivity {
     private MainController mMainController;
     private FragmentManager mFragmentManager;
     private ToolbarController mToolbarController;
-    private boolean mDisableAds;
+    private boolean mIsEmulator;
 
     private void initView() {
         mDisableAds = mTinyDB.getBoolean(Preferences.DISABLE_ADS, false);
-        if (BuildConfig.DEBUG) mDisableAds = true;
+        if (BuildConfig.DEBUG || mIsEmulator) mDisableAds = true;
         setContentView(mDisableAds ? R.layout.activity_main : R.layout.activity_main_with_ads);
         ButterKnife.inject(this);
     }
@@ -74,11 +78,10 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mIsEmulator = Build.BRAND.equals("generic");
         initView();
 
-        // for debugging
-//        mHints.reset();
+        PreferenceManager.setDefaultValues(this, R.xml.settings, false);
 
         mToolbarController = new ToolbarController(this);
         mToolbarController.register();
@@ -87,10 +90,7 @@ public class MainActivity extends BaseActivity {
 
         mFab.setOnClickListener(this::handleFabClicked);
 
-        if (!BuildConfig.DEBUG) {
-            queryIabForDisableAdChange();
-        }
-
+        if (!BuildConfig.DEBUG && !mIsEmulator) queryIabForDisableAdChange();
 
         initAds();
 
@@ -234,6 +234,21 @@ public class MainActivity extends BaseActivity {
 
     @Override protected void onCreateComponent(AppComponent appComponent) {
         appComponent.inject(this);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Timber.d("onActivityResult(" + requestCode + "," + resultCode + "," + data);
+
+        // Pass on the activity result to the helper for handling
+        if (!mIabHelper.handleActivityResult(requestCode, resultCode, data)) {
+            // not handled, so handle it ourselves (here's where you'd
+            // perform any handling of activity results not related to in-app
+            // billing...
+            super.onActivityResult(requestCode, resultCode, data);
+        } else {
+            Timber.d("onActivityResult handled by IABUtil.");
+        }
     }
 
 }

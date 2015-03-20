@@ -7,12 +7,14 @@ import com.google.common.io.Files;
 
 import net.jonathanwerner.leadsheets.events.AllSongsChanged;
 import net.jonathanwerner.leadsheets.events.ChangeFolders;
+import net.jonathanwerner.leadsheets.helpers.Dialog;
 import net.jonathanwerner.leadsheets.helpers.Strings;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -26,6 +28,7 @@ import timber.log.Timber;
 @Singleton
 public class FileStore {
     final File mRootPath;
+    @Inject Dialog mDialog;
     private String mCurrentFile = "";
 
     @Inject
@@ -81,12 +84,30 @@ public class FileStore {
         return filenames;
     }
 
+    public boolean renameFolder(String folderName, String newName) {
+        final File folder = new File(mRootPath, folderName);
+        boolean b = folder.renameTo(new File(folder.getParentFile(), newName.trim()));
+        return b;
+    }
+
     public boolean removeFolder(String folderName) {
         final File folder = new File(mRootPath, folderName);
+        Timber.d("removeFolder: " + folder);
 
         final File archiveDir = new File(mRootPath, ".archive");
         final boolean mkdir = archiveDir.mkdir();
-        final boolean worked = folder.renameTo(new File(archiveDir, folderName));
+        Timber.d("removeFolder: archiveDir: " + archiveDir);
+        File backupPath = new File(archiveDir, folderName);
+        if (backupPath.isDirectory()) {
+
+            // folder with same name was already moved to .archive - rename the old one with date suffix
+            File backupPathWithSuffix = new File(archiveDir, folderName + "." + new Date().getTime() / 1000);
+            Timber.d("removeFolder: backup path with suffix" + backupPathWithSuffix);
+            backupPath.renameTo(backupPathWithSuffix);
+
+        }
+        Timber.d("removeFolder: backupPath: " + backupPath);
+        final boolean worked = folder.renameTo(backupPath);
         if (!worked) Timber.d("removeFolder: didn't work..");
         emitFolderChange();
         return worked;

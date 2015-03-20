@@ -63,11 +63,7 @@ public class SetlistFragment extends DragSwipeRecyclerFragment implements HasCom
         refresh();
         getActivity().invalidateOptionsMenu();
 
-//        if (mSetlistAdapter.getItemCount() > 3) {
-//            new Handler().postDelayed(() -> {
-//               EventBus.getDefault().post(new HintShowSwipeSetlistItem());
-//            }, 200);
-//        }
+        showEmptyText();
 
         super.onResume();
     }
@@ -157,7 +153,7 @@ public class SetlistFragment extends DragSwipeRecyclerFragment implements HasCom
         final SetlistData.ConcreteData item = (SetlistData.ConcreteData) mSetlistAdapter.getItem(position);
 
         menu.setHeaderTitle(item.getText());
-        inflater.inflate(R.menu.contextmenu_folder, menu);
+        inflater.inflate(R.menu.contextmenu_song, menu);
     }
 
     @Override

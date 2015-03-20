@@ -24,10 +24,8 @@ import butterknife.InjectView;
 
 public class EditActivity extends BaseActivity {
     public static final String FILEPATH = "filepath";
-    @InjectView(R.id.toolbar)
-    protected Toolbar mToolbar;
-    @InjectView(R.id.header)
-    View mHeader;
+    @InjectView(R.id.toolbar) protected Toolbar mToolbar;
+    @InjectView(R.id.header) View mHeader;
     @Inject SetlistData mSetlistData;
     @Inject FileStore mFileStore;
     private File mFilePath;

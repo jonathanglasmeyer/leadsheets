@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Leadsheets D</string>
+    <string name="action_about">Impressum</string>
+    <string name="action_done">Erledigt</string>
+    <string name="action_feedback">Feedback geben</string>
+    <string name="action_help">Hilfe</string>
+    <string name="action_lock">Sperren</string>
+    <string name="action_rate">Bewerte diese App</string>
+    <string name="action_remove">Entfernen</string>
+    <string name="action_remove_ads">Werbung entfernen</string>
+    <string name="action_rename">Umbenennen</string>
+    <string name="action_send_mail">Mail senden…</string>
+    <string name="action_setlist_order">Setlist</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="action_show_hints">Zeig die Tipps noch einmal</string>
+    <string name="caption_library">Bibliothek</string>
+    <string name="caption_projects">Projekte</string>
+    <string name="caption_rest">Nicht auf der Setlist</string>
+    <string name="caption_setlist">Setlist</string>
+    <string name="dialog_cancel">Abbrechen</string>
+    <string name="dialog_delete_error">Es gab ein Problem beim Entfernen des Projektes.</string>
+    <string name="dialog_new_folder">Neues Projekt</string>
+    <string name="dialog_new_song">Neuer Song</string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_remove">Entfernen</string>
+    <string name="dialog_remove_project">Möchtest du dieses Projekt wirklich entfernen?</string>
+    <string name="dialog_reset">Zurücksetzen</string>
+    <string name="dialog_reset_setlist">Setlist zurücksetzen?</string>
+    <string name="dialog_thanks">Danke, dass du den Entwickler unterstützt. :). Die App wird sich jetzt neu starten.</string>
+    <string name="empty_folders_view">Willkommen zu Leadsheets! \n\nKlicke auf den gelben Button um ein Projekt hinzuzufügen.</string>
+    <string name="empty_setlist_view">Songs, die du hier erstellst, werden als Textdateien auf dem internen Speicher in dem Order <i>sheets</i> abgelegt.\n\n<b>Tip:</b>\nSynchronisiere diesen Ordner mit einer App wie \'FolderSync\' zu Google Drive/Dropbox, um die Leadsheets am Notebook zu erstellen und auf dem Smartphone anzuzeigen.</string>
+    <string name="feedback_mail_header">Feedback zu Leadsheets</string>
+    <string name="help_text">
+        <![CDATA[
+        <h4>Konzept</h4>
+        <p>Die grundlegende Idea dieser App ist, deine Leadsheets als Textdateien zu speichern. Das ist ein Ansatz,
+        mit dem du dich vermutlich anfreunden kannst, wenn du Leadsheets gewöhnlich nicht als akkurate Transkription,
+        sondern als grobe Stütze benutzt, die nur die schwierig zu merkenden Teile eines Songs skizzieren. </p>
+        <p>Du kannst einen Blick auf meine Leadsheets werfen, um eine Idee zu kriegen, was ich damit meine:
+        https://github.com/jonathanewerner/sheets?files=1</p>
+        <p>Ich würde dir in diesem Zusammenhang auch ans Herz legen, dir mal das <i>Nashville Number System</i>
+        anzuschauen. Das benutze ich momentan, da es damit wirklich ein Kinderspiel wird, Leadsheets auf dem Smartphone
+        Keyboard zu schreiben. Zusätzlich kommt der erhebliche Vorteil dazu, dass du Songs automatisch in jeder
+        Tonart transponiert vorliegen hast - grandios.</p>
+
+        <h4>Projekte</h4>
+        <p>Projekte sind Ordner, die im Appordner (<i>sheets</i>) liegen. Sie enthalten Songs, die du in einer Setlist
+        sortieren kannst. Wenn du einen Song in zwei Projekten brauchst, kopiere die Datei (dies geht momentan noch
+        nicht in der App - benutze einen Dateimanager dafür - auf Android z.B. <i>Solid Explorer</i>).</p><p>
+        So ist sichergestellt dass Änderungen an einem Leadsheet für einen Song, der in zwei Projekten vorkommt,
+        immer projekt-spezifisch sind. </p>
+
+        <h4>Setlists</h4>
+        <p>Diese App erlaubt nur eine Setlist pro Projekt, um die Benutzung weniger komplex zu gestalten.
+        Wenn ein neuer Gig anliegt, setze die Setlist einfach zurück mit dem Papierkorb-Symbol.</p>
+        <p>Es gibt auch eine Bibliotheks-Ansicht deines Projektes, indem du das Symbol in der oberen rechten Ecke drückst.
+        Hier liegen die Songs alphabetisch sortiert vor - praktisch für Proben oder Gigs, bei denen du auf Abruf
+        die Songs parat haben musst.</p>
+        <p>Ein wichtiger, nicht ganz offensichtlicher Punkt: wenn du einen Song löscht, wird er nicht wirklich gelöscht,
+        sondern nur in einen Unterordner <i>.archive</i> verschoben. So ist sichergestellt, dass du nicht ausversehen
+        deine mühsam erstellten Leadsheets endgültig verlierst: schiebe sie einfach mit einem externen Dateimanager
+        zurück.</p>
+
+        <p>Wenn du Ideen für Verbesserungen hast, schreibe mir gerne eine Mail, ich werde auf jeden Fall antworten.</p>
+        <p>Wenn du diese App gut findest, würde ich mich freuen wenn du in Erwägung ziehen würdest, mir ein virtuelles
+        Bier auszugeben, indem du die Werbung entfernst. :) </p><p>Lieben Gruß, Jonathan</p>
+        ]]>
+
+    </string>
+    <string name="hint_add_rest_item">Antippen um Song zur Setlist hinzuzufügen</string>
+    <string name="hint_drag_setlist_item">Lange drücken um Song zu bewegen</string>
+    <string name="hint_open_perf_view">Antippen um detaillierte Setlist zu öffnen</string>
+    <string name="hint_swipe_setlist_item">Rechts wischen um zu entfernen</string>
+    <string name="snack_bar_action_undo">Rückgängig</string>
+    <string name="snack_bar_text_item_removed">Song entfernt</string>
+    <string name="snackbar_showing_hints_again">Zeige die Hilftipps noch einmal</string>
+    <string name="title_activity_detaillist">Detaillierte Setlist</string>
+    <string name="title_activity_edit">Song bearbeiten</string>
+    <string name="title_activity_help">Hilfe</string>
+    <string name="title_activity_settings">Einstellungen</string>
+    <string name="dialog_couldnt_rename">Irgendwas ist schief gegangen - konnte nicht umbenennen.</string>
+</resources>

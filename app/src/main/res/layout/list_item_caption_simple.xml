@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="42dp"
+              android:descendantFocusability="blocksDescendants"
+              android:focusable="false"
+              android:clickable="false"
+
+              android:orientation="horizontal"
+              android:translationZ="-2dp">
+
+    <RelativeLayout
+        android:id="@+id/container"
+        android:clickable="false"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/list_item_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@id/delete_button_wrap"
+            android:layout_toRightOf="@id/lock_hint"
+            android:background="#ececec"
+            android:clickable="false"
+            android:gravity="center_vertical"
+            android:paddingLeft="16dp"
+            android:text="@string/caption_projects"
+            android:textColor="#989898"
+            android:textSize="14dp"
+            android:textStyle="bold"/>
+
+    </RelativeLayout>
+</LinearLayout>
+

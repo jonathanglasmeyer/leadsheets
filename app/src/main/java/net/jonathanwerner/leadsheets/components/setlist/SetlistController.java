@@ -74,6 +74,7 @@ public class SetlistController extends Controller {
                     mSetlistAdapter.onMoveItem(position, mSetlistData.getNewSetlistItemPos()); // notify adapter that list has changed
                 }
                 mSetlistAdapter.showTooltips(); // we add items to setlist -> potentially show hints for setlist items
+                updateSetlistCaption();
                 break;
 
             case SetlistData.ITEM_TYPE_SETLIST:
@@ -117,10 +118,16 @@ public class SetlistController extends Controller {
 
     @Bus public void onEvent(final SongRemoved event) {
         mSetlistAdapter.notifyItemRemoved(event.position);
+        mFragment.showEmptyText();
     }
 
     @Bus public void onEvent(final SongMoved event) {
         mSetlistAdapter.notifyItemMoved(event.oldPosition, event.newPosition);
+        updateSetlistCaption();
+    }
+
+    private void updateSetlistCaption() {
+        mSetlistAdapter.notifyItemChanged(0);
     }
 
     // TODO: deprecate this because of animation glitches
@@ -151,22 +158,6 @@ public class SetlistController extends Controller {
                     mActivityContext.startActivity(intent);
 
                 });
-
-        //        new AlertDialog.Builder(this)
-//                .setTitle(currentScreen.equals(UIState.SETLIST) ? "New Song" : "New Project")
-//                .setView(editTextLayout)
-//                .setPositiveButton("Ok", (dialog, whichButton) -> {
-//                    String text = editText.getText().toString();
-//                    switch (currentScreen) {
-//                        case UIState.SETLIST:
-
-//                            break;
-//                        case UIState.FOLDERS:
-//                            mFileStore.newFolder(text);
-//                            break;
-//                    }
-//                }).setNegativeButton("Cancel", (dialog, whichButton) -> {
-//        }).show();
     }
 
     private void showUndoSnackbar() {
@@ -184,9 +175,8 @@ public class SetlistController extends Controller {
 
     private void onItemUndoActionClicked() {
         mSetlistData.undoLastRemoval();
-//        if (position >= 0) {
-//            mSetlistAdapter.notifyItemInserted(position);
-//        }
+        mFragment.showEmptyText();
+
     }
 
     @Bus public void onEvent(final SetlistReset event) {
